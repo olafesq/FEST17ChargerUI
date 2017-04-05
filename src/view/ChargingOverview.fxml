@@ -97,7 +97,7 @@
                               <Insets top="4.0" />
                            </padding>
                         </Label>
-                        <Label id="big-text" contentDisplay="CENTER" layoutX="16.0" layoutY="222.0" text="FEST16">
+                        <Label id="big-text" contentDisplay="CENTER" layoutX="16.0" layoutY="222.0" text="FEST17">
                            <padding>
                               <Insets top="4.0" />
                            </padding>
