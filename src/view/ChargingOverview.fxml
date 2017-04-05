@@ -1,0 +1,1007 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="1280.0" stylesheets="@Laadija_FEST16_javaFX.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ChargingOverviewController">
+   <children>
+      <VBox prefHeight="720.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox prefHeight="301.0" spacing="10.0">
+               <children>
+                  <VBox prefHeight="200.0">
+                     <children>
+                        <HBox prefHeight="74.0" prefWidth="563.0" spacing="15.0">
+                           <children>
+                              <ComboBox fx:id="portCombo" minHeight="-Infinity" prefHeight="25.0" prefWidth="104.0" promptText="Select Port" />
+                              <Button fx:id="refresh" mnemonicParsing="false" onAction="#handleRefresh" prefWidth="56.0" text="Refresh" />
+                              <Button fx:id="connect" mnemonicParsing="false" onAction="#handleConnect" text="Connect" />
+                              <Button fx:id="disconnect" mnemonicParsing="false" onAction="#handleDisconnect" text="Disconnect">
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="15.0" top="10.0" />
+                           </padding>
+                        </HBox>
+                        <TextArea fx:id="log" editable="false" focusTraversable="false" minHeight="-Infinity" minWidth="390.0" prefHeight="182.0" prefWidth="520.0" text="Charging controller" wrapText="true">
+                           <VBox.margin>
+                              <Insets left="15.0" top="10.0" />
+                           </VBox.margin></TextArea>
+                        <HBox prefHeight="100.0" prefWidth="200.0" spacing="15.0">
+                           <children>
+                              <ToggleButton fx:id="balance" mnemonicParsing="false" onAction="#handleBalance" text="Balance" />
+                              <ToggleButton fx:id="vent" mnemonicParsing="false" onAction="#handleVent" prefWidth="56.0" text="Vent" />
+                              <Button fx:id="reset" mnemonicParsing="false" onAction="#handleReset" text="Reset">
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                           <padding>
+                              <Insets left="15.0" top="25.0" />
+                           </padding>
+                        </HBox>
+                     </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </VBox>
+                  <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="286.0" prefWidth="237.0">
+                     <children>
+                        <ProgressIndicator fx:id="tProgress" minHeight="-Infinity" minWidth="-Infinity" prefHeight="173.0" prefWidth="237.0" VBox.vgrow="NEVER">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin></ProgressIndicator>
+                        <Label id="info-label" fx:id="tLabel" alignment="CENTER" contentDisplay="CENTER" prefWidth="280.0" text="588 / 588 V" textAlignment="JUSTIFY">
+                           <padding>
+                              <Insets top="10.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets top="40.0" />
+                     </padding>
+                  </VBox>
+                  <Pane minWidth="-Infinity" prefHeight="286.0" prefWidth="246.0">
+                     <children>
+                        <TextArea fx:id="infoText" editable="false" focusTraversable="false" layoutY="61.0" mouseTransparent="true" prefHeight="128.0" prefWidth="163.0" text="max V:&#9;0.0&#10;min V:&#9;0.0&#10;avg V:&#9;0.0&#10;max T:&#9;0 C">
+                           <font>
+                              <Font size="19.0" />
+                           </font>
+                        </TextArea>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="286.0">
+                     <children>
+                        <ImageView layoutY="54.0" nodeOrientation="INHERIT" onMouseClicked="#about" preserveRatio="true">
+                           <image>
+                              <Image url="@../Images/FS_ikoon.png" />
+                           </image>
+                        </ImageView>
+                        <Label id="welcome-text" contentDisplay="CENTER" layoutX="-11.0" layoutY="171.0" text="Charging controller">
+                           <padding>
+                              <Insets top="4.0" />
+                           </padding>
+                        </Label>
+                        <Label id="big-text" contentDisplay="CENTER" layoutX="16.0" layoutY="222.0" text="FEST16">
+                           <padding>
+                              <Insets top="4.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                  </Pane>
+               </children>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="10.0" left="5.0" top="5.0" />
+               </padding>
+            </HBox>
+            <TabPane>
+               <tabs>
+                  <Tab closable="false" text="Capacity">
+                     <content>
+                        <VBox prefHeight="200.0">
+                           <children>
+                              <HBox prefWidth="1130.0">
+                                 <children>
+                                    <Label layoutX="52.0" layoutY="413.0" prefWidth="120.0" text="Module 1">
+                                       <padding>
+                                          <Insets left="10.0" />
+                                       </padding>
+                                    </Label>
+                                    <Label layoutX="175.0" layoutY="413.0" prefWidth="120.0" text="Module 2">
+                                       <padding>
+                                          <Insets left="10.0" />
+                                       </padding>
+                                    </Label>
+                                    <Label layoutX="296.0" layoutY="413.0" prefWidth="120.0" text="Module 3">
+                                       <padding>
+                                          <Insets left="10.0" />
+                                       </padding>
+                                    </Label>
+                                    <Label layoutX="404.0" layoutY="413.0" prefWidth="120.0" text="Module 4">
+                                       <padding>
+                                          <Insets left="10.0" />
+                                       </padding>
+                                    </Label>
+                                    <Label layoutX="521.0" layoutY="413.0" prefWidth="120.0" text="Module 5">
+                                       <padding>
+                                          <Insets left="10.0" />
+                                       </padding>
+                                    </Label>
+                                    <Label layoutX="640.0" layoutY="413.0" prefWidth="120.0" text="Module 6">
+                                       <padding>
+                                          <Insets left="10.0" />
+                                       </padding>
+                                    </Label>
+                                    <Label layoutX="760.0" layoutY="413.0" prefWidth="120.0" text="Module 7">
+                                       <padding>
+                                          <Insets left="10.0" />
+                                       </padding>
+                                    </Label>
+                                    <Label layoutX="877.0" layoutY="413.0" prefWidth="120.0" text="Module 8">
+                                       <padding>
+                                          <Insets left="10.0" />
+                                       </padding>
+                                    </Label>
+                                    <Label layoutX="995.0" layoutY="413.0" prefWidth="120.0" text="Module 9">
+                                       <padding>
+                                          <Insets left="10.0" />
+                                       </padding>
+                                    </Label>
+                                    <Label layoutX="1107.0" layoutY="413.0" prefWidth="120.0" text="Module 10">
+                                       <padding>
+                                          <Insets left="10.0" />
+                                       </padding>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <StackPane minWidth="-Infinity" prefHeight="252.0" prefWidth="390.0">
+                                 <children>
+                                    <HBox fx:id="pBarPane" disable="true" prefHeight="252.0" prefWidth="1130.0">
+                                       <children>
+                                          <VBox prefHeight="252.0" prefWidth="75.0">
+                                             <children>
+                                                <ProgressBar fx:id="element_1_1_field1" prefHeight="10.0" prefWidth="75.0" progress="0.67">
+                                                   <VBox.margin>
+                                                      <Insets />
+                                                   </VBox.margin>
+                                                </ProgressBar>
+                                                <ProgressBar fx:id="element_1_2_field1" prefHeight="10.0" prefWidth="75.0" progress="0.59" />
+                                                <ProgressBar fx:id="element_1_3_field1" prefHeight="10.0" prefWidth="75.0" progress="0.56" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.72" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.6" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.68" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.73" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.63" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.66" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.67" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.62" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.61" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.74" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.55" />
+                                             </children>
+                                          </VBox>
+                                          <VBox prefWidth="45.0">
+                                             <children>
+                                                <Label text="28 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="26 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                          <VBox prefHeight="252.0" prefWidth="75.0">
+                                             <children>
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.74" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.73" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.54" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.73" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.66" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.59" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.61" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.7" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.76" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.87" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.61" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.79" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.79" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.71" />
+                                             </children>
+                                          </VBox>
+                                          <VBox prefWidth="45.0">
+                                             <children>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                          <VBox prefHeight="252.0" prefWidth="75.0">
+                                             <children>
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.66" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.56" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.73" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.7" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.65" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.6" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.68" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.76" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.66" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.7" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.63" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.74" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.63" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.65" />
+                                             </children>
+                                          </VBox>
+                                          <VBox prefWidth="45.0">
+                                             <children>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                          <VBox prefHeight="252.0" prefWidth="75.0">
+                                             <children>
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.72" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.79" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.71" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.66" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.61" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.68" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.56" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.67" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.68" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.61" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.63" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.71" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.41" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.9" />
+                                             </children>
+                                          </VBox>
+                                          <VBox prefWidth="45.0">
+                                             <children>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                          <VBox prefHeight="252.0" prefWidth="75.0">
+                                             <children>
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.68" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.67" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.7" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.67" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.72" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.76" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.67" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.72" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.8" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.66" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.67" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.65" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.73" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.77" />
+                                             </children>
+                                          </VBox>
+                                          <VBox prefWidth="45.0">
+                                             <children>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                          <VBox prefHeight="252.0" prefWidth="75.0">
+                                             <children>
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.77" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.8" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.73" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.74" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.72" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.7" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.73" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.7" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.79" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.79" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.72" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.82" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.77" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.79" />
+                                             </children>
+                                          </VBox>
+                                          <VBox prefWidth="45.0">
+                                             <children>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                          <VBox prefHeight="252.0" prefWidth="75.0">
+                                             <children>
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.68" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.56" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.66" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.73" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.6" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="1.0" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.8" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.65" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.85" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.74" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.79" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.74" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.66" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.74" />
+                                             </children>
+                                          </VBox>
+                                          <VBox prefWidth="45.0">
+                                             <children>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="30 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                          <VBox prefHeight="252.0" prefWidth="75.0">
+                                             <children>
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.7" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.68" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.72" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.83" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.67" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.82" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.88" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.63" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.74" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.83" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.8" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.77" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.72" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.85" />
+                                             </children>
+                                          </VBox>
+                                          <VBox prefWidth="45.0">
+                                             <children>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                          <VBox prefHeight="252.0" prefWidth="75.0">
+                                             <children>
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.66" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.73" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.7" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.77" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.66" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.73" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.72" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.76" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.61" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.72" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.79" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.7" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.72" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.68" />
+                                             </children>
+                                          </VBox>
+                                          <VBox prefWidth="45.0">
+                                             <children>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                          <VBox prefHeight="200.0" prefWidth="75.0">
+                                             <children>
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.76" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.78" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.57" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.71" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.83" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.77" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.71" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.71" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.76" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.66" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.76" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.71" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.73" />
+                                                <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.72" />
+                                             </children>
+                                          </VBox>
+                                          <VBox prefWidth="45.0">
+                                             <children>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <Label text="27 C">
+                                                   <VBox.margin>
+                                                      <Insets left="5.0" />
+                                                   </VBox.margin>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                    <HBox fx:id="pBalPane" mouseTransparent="true" prefHeight="252.0" prefWidth="1130.0">
+                                       <children>
+                                          <VBox prefHeight="252.0" prefWidth="75.0" spacing="8.0">
+                                             <children>
+                                                <Circle fill="#3bff26" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5">
+                                                   <VBox.margin>
+                                                      <Insets />
+                                                   </VBox.margin>
+                                                </Circle>
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="36.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="54.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="36.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="72.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="126.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="144.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="108.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="90.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="198.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="216.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                             </children>
+                                          </VBox>
+                                          <VBox prefWidth="45.0" />
+                                          <VBox prefHeight="252.0" prefWidth="75.0" spacing="8.0">
+                                             <children>
+                                                <Circle fill="#3bff26" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5">
+                                                   <VBox.margin>
+                                                      <Insets />
+                                                   </VBox.margin>
+                                                </Circle>
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="36.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="54.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="36.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="72.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="126.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="144.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="108.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="90.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="198.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="216.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                             </children>
+                                          </VBox>
+                                          <VBox prefWidth="45.0" />
+                                          <VBox prefHeight="252.0" prefWidth="75.0" spacing="8.0">
+                                             <children>
+                                                <Circle fill="#3bff26" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5">
+                                                   <VBox.margin>
+                                                      <Insets />
+                                                   </VBox.margin>
+                                                </Circle>
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="36.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="54.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="36.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="72.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="126.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="144.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="108.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="90.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="198.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="216.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                             </children>
+                                          </VBox>
+                                          <VBox prefWidth="45.0" />
+                                          <VBox prefHeight="252.0" prefWidth="75.0" spacing="8.0">
+                                             <children>
+                                                <Circle fill="#3bff26" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5">
+                                                   <VBox.margin>
+                                                      <Insets />
+                                                   </VBox.margin>
+                                                </Circle>
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="36.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="54.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="36.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="72.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="126.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="144.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="108.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="90.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="198.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="216.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                             </children>
+                                          </VBox>
+                                          <VBox prefWidth="45.0" />
+                                          <VBox prefHeight="252.0" prefWidth="75.0" spacing="8.0">
+                                             <children>
+                                                <Circle fill="#3bff26" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5">
+                                                   <VBox.margin>
+                                                      <Insets />
+                                                   </VBox.margin>
+                                                </Circle>
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="36.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="54.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="36.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="72.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="126.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="144.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="108.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="90.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="198.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="216.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                             </children>
+                                          </VBox>
+                                          <VBox prefWidth="45.0" />
+                                          <VBox prefHeight="252.0" prefWidth="75.0" spacing="8.0">
+                                             <children>
+                                                <Circle fill="#3bff26" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5">
+                                                   <VBox.margin>
+                                                      <Insets />
+                                                   </VBox.margin>
+                                                </Circle>
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="36.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="54.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="36.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="72.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="126.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="144.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="108.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="90.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="198.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="216.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                             </children>
+                                          </VBox>
+                                          <VBox prefWidth="45.0" />
+                                          <VBox prefHeight="252.0" prefWidth="75.0" spacing="8.0">
+                                             <children>
+                                                <Circle fill="#3bff26" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5">
+                                                   <VBox.margin>
+                                                      <Insets />
+                                                   </VBox.margin>
+                                                </Circle>
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="36.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="54.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="36.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="72.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="126.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="144.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="108.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="90.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="198.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="216.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                             </children>
+                                          </VBox>
+                                          <VBox prefWidth="45.0" />
+                                          <VBox prefHeight="252.0" prefWidth="75.0" spacing="8.0">
+                                             <children>
+                                                <Circle fill="#3bff26" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5">
+                                                   <VBox.margin>
+                                                      <Insets />
+                                                   </VBox.margin>
+                                                </Circle>
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="36.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="54.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="36.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="72.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="126.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="144.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="108.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="90.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="198.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="216.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                             </children>
+                                          </VBox>
+                                          <VBox prefWidth="45.0" />
+                                          <VBox prefHeight="252.0" prefWidth="75.0" spacing="8.0">
+                                             <children>
+                                                <Circle fill="#3bff26" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5">
+                                                   <VBox.margin>
+                                                      <Insets />
+                                                   </VBox.margin>
+                                                </Circle>
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="36.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="54.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="36.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="72.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="126.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="144.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="108.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="90.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="198.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="216.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                             </children>
+                                          </VBox>
+                                          <VBox prefWidth="45.0" />
+                                          <VBox prefHeight="252.0" prefWidth="75.0" spacing="8.0">
+                                             <children>
+                                                <Circle fill="#3bff26" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5">
+                                                   <VBox.margin>
+                                                      <Insets />
+                                                   </VBox.margin>
+                                                </Circle>
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="36.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="54.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="36.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="18.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="72.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="126.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="144.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="108.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="90.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="198.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                                <Circle fill="#3bff26" layoutX="20.0" layoutY="216.0" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                       <padding>
+                                          <Insets left="6.0" top="3.0" />
+                                       </padding>
+                                    </HBox>
+                                 </children>
+                              </StackPane>
+                           </children>
+                           <padding>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </padding>
+                        </VBox>
+                     </content>
+                  </Tab>
+                  <Tab closable="false" text="Graph">
+                     <content>
+                        <VBox>
+                           <children>
+                              <LineChart fx:id="graafik" createSymbols="false" prefHeight="334.0" prefWidth="1280.0">
+                                <xAxis>
+                                  <NumberAxis minorTickCount="1" minorTickLength="1.0" side="BOTTOM" tickUnit="1.0" upperBound="2000.0" />
+                                </xAxis>
+                                <yAxis>
+                                  <NumberAxis autoRanging="false" forceZeroInRange="false" lowerBound="3.2" minorTickCount="2" side="LEFT" tickUnit="0.1" upperBound="4.3" fx:id="xTelg" />
+                                </yAxis>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets right="20.0" top="10.0" />
+                                 </padding>
+                              </LineChart>
+                              <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                                 <children>
+                                    <Button fx:id="saveLog" mnemonicParsing="false" onAction="#handleSaveLog" text="Save log As.." />
+                                    <CheckBox mnemonicParsing="false" onAction="#handleAutoRange" text="Auto Range">
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                       <HBox.margin>
+                                          <Insets left="50.0" top="5.0" />
+                                       </HBox.margin>
+                                    </CheckBox>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                           <padding>
+                              <Insets left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </VBox>
+                     </content>
+                  </Tab>
+                  <Tab closable="false" text="Settings">
+                     <content>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <HBox prefWidth="200.0">
+                                 <children>
+                                    <TextField fx:id="sCommandField" onAction="#handleSend" prefWidth="256.0" promptText="serial command">
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                    </TextField>
+                                    <Button fx:id="send" mnemonicParsing="false" onAction="#handleSend" prefWidth="56.0" text="Send" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets bottom="10.0" top="10.0" />
+                                 </padding>
+                              </HBox>
+                              <CheckBox fx:id="autoPoll" mnemonicParsing="false" onAction="#toggleAutoPoll" selected="true" text="Auto poll Volt and Temp">
+                                 <padding>
+                                    <Insets bottom="20.0" left="10.0" />
+                                 </padding>
+                                 <VBox.margin>
+                                    <Insets top="20.0" />
+                                 </VBox.margin>
+                              </CheckBox>
+                              <HBox prefWidth="200.0">
+                                 <children>
+                                    <TextField fx:id="autoPollTime" minHeight="-Infinity" onAction="#handleAutoPollTime" prefHeight="20.0" prefWidth="44.0" text="5000">
+                                       <HBox.margin>
+                                          <Insets left="20.0" />
+                                       </HBox.margin>
+                                    </TextField>
+                                    <Label id="label-text" prefHeight="20.0" prefWidth="109.0" text="ms  Polling interval" />
+                                 </children>
+                                 <padding>
+                                    <Insets left="10.0" />
+                                 </padding>
+                              </HBox>
+                              <Button mnemonicParsing="false" onAction="#about" text="About">
+                                 <VBox.margin>
+                                    <Insets left="10.0" top="80.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <CheckBox layoutX="20.0" layoutY="85.0" mnemonicParsing="false" text="Dark theme" visible="false">
+                                 <padding>
+                                    <Insets bottom="20.0" left="10.0" />
+                                 </padding>
+                              </CheckBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
+                           </padding>
+                        </VBox>
+                     </content>
+                  </Tab>
+               </tabs>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </TabPane>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
