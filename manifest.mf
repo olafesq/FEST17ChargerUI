@@ -1,4 +1,4 @@
-Manifest-Version: 1.1
+Manifest-Version: 1.0
 SplashScreen-Image: Images/FS_splash.png
 X-COMMENT: Main-Class will be added automatically by build
 
