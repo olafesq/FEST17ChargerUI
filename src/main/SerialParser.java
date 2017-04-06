@@ -3,7 +3,7 @@ package main;
 
 import java.util.Arrays;
 
-public class DataParser {
+public class SerialParser {
     int nCells = 14*10+4;//14*10; //How many cells in battery pack //+4 for averaga Voltage, sumVoltage, minV, maxV 
     int nTemp = 5*10+3; //5*10; Number of temp sensors //+3 for avertage temp, minT, max T
     int maxV = 5880000;
@@ -59,7 +59,7 @@ public class DataParser {
     }
     
     public void toConsole(String string){
-        UART.controller.appendLogWindow(string);
+        Main.controller.appendLogWindow(string);
     }
     public void temps(String message){
         try {
@@ -78,8 +78,8 @@ public class DataParser {
                 
                 if (row==nTemp){  //detect last row and send data to UI thread
                     btemp=false;
-                    UART.controller.setTemp(temp);
-                    UART.controller.setMaxTempColor(isMaxTRow);
+                    Main.controller.setTemp(temp);
+                    Main.controller.setMaxTempColor(isMaxTRow);
                     maxT = temp[nTemp-1]; //last element is maxT                   
                     //toConsole(temp.toString());
                 }
@@ -119,9 +119,9 @@ public class DataParser {
             bvoltages = false; //reset flag when last row arrived   
             calcProgress(voltBalan);
             calcTProgress(voltBalan);
-            UART.controller.setVHint(voltBalan); 
-            UART.controller.setMinVCellColor(minVRow);
-            UART.controller.setBalIndicator(bBalance);
+            Main.controller.setVHint(voltBalan); 
+            Main.controller.setMinVCellColor(minVRow);
+            Main.controller.setBalIndicator(bBalance);
             //UART.controller.appendLogWindow(String.valueOf(bBalance[0]));
             minCellV = maxVcell ; //reset refernce v            
         }         
@@ -136,11 +136,11 @@ public class DataParser {
     
     void calcTProgress(int [][] voltBalan){ //the round total progress circle
         double tProgress =  (voltBalan[nCells-1-2][0]-minV)/(double)(maxV-minV);
-        UART.controller.setTPogress(tProgress);
+        Main.controller.setTPogress(tProgress);
         //toConsole(Integer.toString(voltBalan[nCells-1-2][0]));
         
         int tLabel = voltBalan[nCells-1-2][0]/10000;
-        UART.controller.settLabel(Integer.toString(tLabel)+"/"+ Integer.toString(maxV/10000));
+        Main.controller.settLabel(Integer.toString(tLabel)+"/"+ Integer.toString(maxV/10000));
         //toConsole(Integer.toString(tLabel));
     }
     
@@ -151,7 +151,7 @@ public class DataParser {
             progress[i] = (voltBalan[i][0]-minVcell)/(double)(maxVcell-minVcell) ;     
             //toConsole(Double.toString(progress[i]));
         }
-        UART.controller.setProgressBar(progress);
+        Main.controller.setProgressBar(progress);
         
         //Datapoints for graph & info text area
         double[] dpoint = new double[3];
@@ -159,9 +159,9 @@ public class DataParser {
         dpoint[1] = (double)voltBalan[nCells-1-1][0]/10000; //minV
         dpoint[2] = (double)voltBalan[nCells-1][0]/10000;   //maxV
         
-        UART.controller.addDPoint(dpoint);
+        Main.controller.addDPoint(dpoint);
         
-        UART.controller.setInfoText(String.format("%.2f",dpoint[2]), String.format("%.2f",dpoint[1]),  
+        Main.controller.setInfoText(String.format("%.2f",dpoint[2]), String.format("%.2f",dpoint[1]),  
                 String.format("%.2f",dpoint[0]),  Integer.toString(maxT)); //two decimal points
     }
     

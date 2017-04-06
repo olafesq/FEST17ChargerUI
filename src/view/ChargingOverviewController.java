@@ -35,6 +35,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.StageStyle;
 import main.CSVUtils;
+import main.IxxatCANbus;
 import main.UART;
 
 
@@ -42,7 +43,8 @@ public class ChargingOverviewController {
     int maxT = 35; //over maxT is temp text in red
     
     DateFormat dateFormat = new SimpleDateFormat("HH:mm");
-           
+    
+    private IxxatCANbus can;
     private UART uart;
     public boolean bautoPoll = true;
     //ProgressBar helpers
@@ -118,6 +120,11 @@ public class ChargingOverviewController {
     @FXML
     private void handleDisconnect(){
         uart.disconnect();
+    }
+    
+        @FXML
+    private void handleCAN(){
+        can.CanReader();
     }
     
     @FXML
@@ -250,6 +257,10 @@ public class ChargingOverviewController {
 
     public void setUart(UART uart) {
         this.uart = uart;
+    }
+    
+    public void setCAN(IxxatCANbus CANbus) {
+        this.can = CANbus;
     }
     
     public void setProgressBar(double[] value){

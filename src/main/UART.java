@@ -18,11 +18,11 @@ public class UART {
     
     SerialPort serialPort = null;
     
-    static ChargingOverviewController controller;    
+    ChargingOverviewController controller;    
     SerialProtocol serialProtocol;    
  
     public UART (ChargingOverviewController controller) {
-        UART.controller = controller; 
+        this.controller = controller; 
         serialProtocol = new SerialProtocol();
     }
         

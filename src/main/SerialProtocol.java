@@ -5,14 +5,12 @@ import gnu.io.SerialPortEventListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class SerialProtocol {  
    
     CommPortSender commPortSender = new CommPortSender();
     CommPortReceiver commPortReceiver = new CommPortReceiver();
-    DataParser dataParser = new DataParser();
+    SerialParser dataParser = new SerialParser();
     
     public boolean connected = false;
   
@@ -79,7 +77,7 @@ public class SerialProtocol {
                         }                        
                     }
                     catch (IOException e) {
-                        UART.controller.appendLogWindow(e.toString());
+                        Main.controller.appendLogWindow(e.toString());
                     }
                     dataParser.parseMsg(new String (buffer,0,tail-1)); //Send received message to data parser //tail-1 to get rid of \r char 
 //                };

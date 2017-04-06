@@ -32,6 +32,11 @@
                                     <Insets left="10.0" />
                                  </HBox.margin>
                               </Button>
+                              <ToggleButton fx:id="vent1" maxHeight="-Infinity" mnemonicParsing="false" onAction="#handleVent" prefHeight="23.0" prefWidth="56.0" text="CAN">
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </ToggleButton>
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="15.0" top="10.0" />

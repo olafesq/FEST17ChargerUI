@@ -27,6 +27,8 @@ import java.util.logging.Logger;
  
 public class IxxatCANbus {
     
+    CanParser canParser = new CanParser();
+    
      // Create VCI Server Object
     VciServer         oVciServer      = null;
     IVciDeviceManager oDeviceManager  = null;
@@ -445,7 +447,7 @@ public class IxxatCANbus {
 
     }
     
-    void CanReader(){
+    public void CanReader(){
         
         try{
             CanMessage  oCanMsg   = new CanMessage();
@@ -468,8 +470,10 @@ public class IxxatCANbus {
                   System.out.print("\n");
                   fTimedOut = false;
                 }
-                //System.out.println("No: " + qwMsgNo + " " + oCanMsg); // Scroll mode
-                System.out.print("\rNo: " + qwMsgNo + " " + oCanMsg + "  "); // Overwrite mode
+                System.out.println("No: " + qwMsgNo + " " + oCanMsg); // Scroll mode
+                //System.out.print("\rNo: " + qwMsgNo + " " + oCanMsg + "  "); // Overwrite mode
+                int id = oCanMsg.m_dwIdentifier;
+                canParser.parseMsg(id, oCanMsg.toString()); //Send can messager to canParser
               }
               catch(Throwable oException)
               {

@@ -22,13 +22,15 @@ public class Main extends Application {
     public Stage primaryStage;
     private BorderPane rootLayout;
     
-    private ChargingOverviewController controller;
+    static ChargingOverviewController controller;
     private UART uart;
+    IxxatCANbus CANbus;
 
     @Override //This is automatically called when charger window is closed..
     public void stop() throws Exception {
         System.out.println("shutting down charger application..");
         uart.disconnect();    
+        CANbus.IxxatClose();
     }
     
     @Override
@@ -52,6 +54,9 @@ public class Main extends Application {
         uart = new UART(controller);
         controller.setUart(uart);
         uart.searchForPorts();
+                
+        CANbus = new IxxatCANbus();
+        controller.setCAN(CANbus);
         
 //        for debugging only
 //        int[][] volts = new int[144][2];
