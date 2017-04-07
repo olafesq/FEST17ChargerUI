@@ -46,6 +46,7 @@ public class ChargingOverviewController {
     
     private IxxatCANbus can;
     private UART uart;
+    
     public boolean bautoPoll = true;
     //ProgressBar helpers
     List<ProgressBar> pBar;
@@ -89,6 +90,8 @@ public class ChargingOverviewController {
     private ToggleButton balance;
     @FXML
     private ToggleButton vent;
+    @FXML
+    private ToggleButton canbut;
     
     //Settings Tab
     @FXML
@@ -124,7 +127,7 @@ public class ChargingOverviewController {
     
         @FXML
     private void handleCAN(){
-        can.CanReader();
+        can.canReader();
     }
     
     @FXML
@@ -141,7 +144,7 @@ public class ChargingOverviewController {
     private void handleSend(){
         String customCommand = (String)sCommandField.getText();
         sCommandField.clear();
-        uart.sendCommand(customCommand);
+        uart.sendCommand(customCommand);     
     }
     
     @FXML

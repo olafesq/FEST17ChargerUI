@@ -32,7 +32,7 @@
                                     <Insets left="10.0" />
                                  </HBox.margin>
                               </Button>
-                              <ToggleButton fx:id="vent1" maxHeight="-Infinity" mnemonicParsing="false" onAction="#handleVent" prefHeight="23.0" prefWidth="56.0" text="CAN">
+                              <ToggleButton fx:id="canbut" maxHeight="-Infinity" mnemonicParsing="false" onAction="#handleCAN" prefHeight="23.0" prefWidth="56.0" text="CAN">
                                  <HBox.margin>
                                     <Insets left="10.0" />
                                  </HBox.margin>

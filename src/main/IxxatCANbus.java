@@ -447,7 +447,7 @@ public class IxxatCANbus {
 
     }
     
-    public void CanReader(){
+    public void canReader(){
         
         try{
             CanMessage  oCanMsg   = new CanMessage();
@@ -473,7 +473,8 @@ public class IxxatCANbus {
                 System.out.println("No: " + qwMsgNo + " " + oCanMsg); // Scroll mode
                 //System.out.print("\rNo: " + qwMsgNo + " " + oCanMsg + "  "); // Overwrite mode
                 int id = oCanMsg.m_dwIdentifier;
-                canParser.parseMsg(id, oCanMsg.toString()); //Send can messager to canParser
+                byte[] data = oCanMsg.m_abData;
+                canParser.parseMsg(id, data); //Send can messager to canParser
               }
               catch(Throwable oException)
               {
