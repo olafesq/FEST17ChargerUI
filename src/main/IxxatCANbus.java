@@ -391,6 +391,10 @@ public class IxxatCANbus {
 //              // Remove ID 1
 //              oCanControl.RemFilterIds(ICanControl.CAN_FILTER_STD, 1, 0xFFFF);
 
+                //Add filters ID's:0x500-0x5ff
+                oCanControl.AddFilterIds(ICanControl.CAN_FILTER_STD, 0x0500, 0xFF00);
+
+
               // Start
               oCanControl.StartLine();
 
@@ -527,7 +531,8 @@ public class IxxatCANbus {
     }
 
     
-    void IxxatClose(){
+    public void IxxatClose(){
+        
         System.out.println("Cleaning up CAN channels");        
         // Release CAN Message Writer
         try {
@@ -547,7 +552,28 @@ public class IxxatCANbus {
         } catch (Throwable ex) {
             Logger.getLogger(IxxatCANbus.class.getName()).log(Level.SEVERE, null, ex);
         }
-            
+        
+        // Stop CAN Controller
+        if(oCanControl != null)
+        {
+          try
+          { 
+            System.out.println("Stopping CAN Controller");
+            oCanControl.StopLine();
+            oCanControl.ResetLine();
+          }
+          catch(Throwable oException)
+          {
+            if (oException instanceof VciException)
+            {
+              VciException oVciException = (VciException) oException;
+              System.err.println("Reset CAN Controller, VciException: " + oVciException + " => " + oVciException.VciFormatError());
+            } 
+            else
+              System.err.println("Reset CAN Controller, Exception: " + oException);
+          }
+        }  
+        
         // release all references
         System.out.println("Cleaning up Interface references to VCI Device");
         try

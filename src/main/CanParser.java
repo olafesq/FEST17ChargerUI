@@ -1,8 +1,5 @@
 package main;
 
-import java.nio.charset.StandardCharsets;
-import javax.xml.bind.DatatypeConverter;
-
 /**
  *
  * @author Olavi
@@ -19,5 +16,6 @@ public class CanParser {
         //byte data2[] = DatatypeConverter.parseHexBinary(dataString); //parse data into byte array
         
         Main.controller.appendLogWindow(String.valueOf(id)+" & data: "+ String.valueOf(data));
+        //Main.controller.setProgressBar(value);
     }
 }

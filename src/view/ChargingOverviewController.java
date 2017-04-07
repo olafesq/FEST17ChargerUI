@@ -48,6 +48,8 @@ public class ChargingOverviewController {
     private UART uart;
     
     public boolean bautoPoll = true;
+    boolean canning = false;
+    
     //ProgressBar helpers
     List<ProgressBar> pBar;
     List<Circle> pBal;
@@ -90,8 +92,6 @@ public class ChargingOverviewController {
     private ToggleButton balance;
     @FXML
     private ToggleButton vent;
-    @FXML
-    private ToggleButton canbut;
     
     //Settings Tab
     @FXML
@@ -117,17 +117,17 @@ public class ChargingOverviewController {
     @FXML
     private void handleConnect() throws Exception {
         String selectedPort = (String)portCombo.getValue();   
-        uart.connect(selectedPort);        
+        if ("CANbus".equals(selectedPort)){
+            canning = true;
+            can.canReader();
+        }
+        else uart.connect(selectedPort);        
     }
     
     @FXML
     private void handleDisconnect(){
-        uart.disconnect();
-    }
-    
-        @FXML
-    private void handleCAN(){
-        can.canReader();
+        if(canning) can.IxxatClose();
+        else uart.disconnect();        
     }
     
     @FXML
@@ -256,6 +256,7 @@ public class ChargingOverviewController {
     public void updatePortCombo(ObservableList<String> options) {
         portCombo.getItems().clear();
         portCombo.setItems(options);
+        portCombo.setValue(options.get(0)); //set CANbus as default selection
     }
 
     public void setUart(UART uart) {

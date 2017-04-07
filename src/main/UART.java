@@ -31,6 +31,7 @@ public class UART {
         Enumeration ports = CommPortIdentifier.getPortIdentifiers();        
         List<String> list = new ArrayList<>();
         ObservableList<String> options = FXCollections.observableList(list); 
+        options.add("CANbus");
         
         while (ports.hasMoreElements()){           
             CommPortIdentifier curPort = (CommPortIdentifier)ports.nextElement();
