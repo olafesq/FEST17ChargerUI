@@ -8,7 +8,7 @@ public class SerialParser {
     int nTemp = 5*10+3; //5*10; Number of temp sensors //+3 for avertage temp, minT, max T
     int maxV = 5880000;
     int maxVcell = 42000;
-    int minV = 4480000;
+    int minV = 4480000; //3920000?
     int minVcell = 32000;
     int maxT;
     int minCellV = maxVcell; //helper to find minV cell row

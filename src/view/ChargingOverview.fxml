@@ -203,7 +203,7 @@
                                                 <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.55" />
                                              </children>
                                           </VBox>
-                                          <VBox prefWidth="45.0">
+                                          <VBox prefWidth="45.0" spacing="30.0">
                                              <children>
                                                 <Label text="28 C">
                                                    <VBox.margin>
@@ -231,6 +231,9 @@
                                                    </VBox.margin>
                                                 </Label>
                                              </children>
+                                             <padding>
+                                                <Insets top="20.0" />
+                                             </padding>
                                           </VBox>
                                           <VBox prefHeight="252.0" prefWidth="75.0">
                                              <children>
@@ -250,7 +253,7 @@
                                                 <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.71" />
                                              </children>
                                           </VBox>
-                                          <VBox prefWidth="45.0">
+                                          <VBox prefWidth="45.0" spacing="30.0">
                                              <children>
                                                 <Label text="27 C">
                                                    <VBox.margin>
@@ -278,6 +281,9 @@
                                                    </VBox.margin>
                                                 </Label>
                                              </children>
+                                             <padding>
+                                                <Insets top="20.0" />
+                                             </padding>
                                           </VBox>
                                           <VBox prefHeight="252.0" prefWidth="75.0">
                                              <children>
@@ -297,7 +303,7 @@
                                                 <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.65" />
                                              </children>
                                           </VBox>
-                                          <VBox prefWidth="45.0">
+                                          <VBox prefWidth="45.0" spacing="30.0">
                                              <children>
                                                 <Label text="27 C">
                                                    <VBox.margin>
@@ -325,6 +331,9 @@
                                                    </VBox.margin>
                                                 </Label>
                                              </children>
+                                             <padding>
+                                                <Insets top="20.0" />
+                                             </padding>
                                           </VBox>
                                           <VBox prefHeight="252.0" prefWidth="75.0">
                                              <children>
@@ -344,7 +353,7 @@
                                                 <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.9" />
                                              </children>
                                           </VBox>
-                                          <VBox prefWidth="45.0">
+                                          <VBox prefWidth="45.0" spacing="30.0">
                                              <children>
                                                 <Label text="27 C">
                                                    <VBox.margin>
@@ -372,6 +381,9 @@
                                                    </VBox.margin>
                                                 </Label>
                                              </children>
+                                             <padding>
+                                                <Insets top="20.0" />
+                                             </padding>
                                           </VBox>
                                           <VBox prefHeight="252.0" prefWidth="75.0">
                                              <children>
@@ -391,7 +403,7 @@
                                                 <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.77" />
                                              </children>
                                           </VBox>
-                                          <VBox prefWidth="45.0">
+                                          <VBox prefWidth="45.0" spacing="30.0">
                                              <children>
                                                 <Label text="27 C">
                                                    <VBox.margin>
@@ -419,6 +431,9 @@
                                                    </VBox.margin>
                                                 </Label>
                                              </children>
+                                             <padding>
+                                                <Insets top="20.0" />
+                                             </padding>
                                           </VBox>
                                           <VBox prefHeight="252.0" prefWidth="75.0">
                                              <children>
@@ -438,7 +453,7 @@
                                                 <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.79" />
                                              </children>
                                           </VBox>
-                                          <VBox prefWidth="45.0">
+                                          <VBox prefWidth="45.0" spacing="30.0">
                                              <children>
                                                 <Label text="27 C">
                                                    <VBox.margin>
@@ -466,6 +481,9 @@
                                                    </VBox.margin>
                                                 </Label>
                                              </children>
+                                             <padding>
+                                                <Insets top="20.0" />
+                                             </padding>
                                           </VBox>
                                           <VBox prefHeight="252.0" prefWidth="75.0">
                                              <children>
@@ -485,7 +503,7 @@
                                                 <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.74" />
                                              </children>
                                           </VBox>
-                                          <VBox prefWidth="45.0">
+                                          <VBox prefWidth="45.0" spacing="30.0">
                                              <children>
                                                 <Label text="27 C">
                                                    <VBox.margin>
@@ -513,6 +531,9 @@
                                                    </VBox.margin>
                                                 </Label>
                                              </children>
+                                             <padding>
+                                                <Insets top="20.0" />
+                                             </padding>
                                           </VBox>
                                           <VBox prefHeight="252.0" prefWidth="75.0">
                                              <children>
@@ -532,7 +553,7 @@
                                                 <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.85" />
                                              </children>
                                           </VBox>
-                                          <VBox prefWidth="45.0">
+                                          <VBox prefWidth="45.0" spacing="30.0">
                                              <children>
                                                 <Label text="27 C">
                                                    <VBox.margin>
@@ -560,6 +581,9 @@
                                                    </VBox.margin>
                                                 </Label>
                                              </children>
+                                             <padding>
+                                                <Insets top="20.0" />
+                                             </padding>
                                           </VBox>
                                           <VBox prefHeight="252.0" prefWidth="75.0">
                                              <children>
@@ -579,7 +603,7 @@
                                                 <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.68" />
                                              </children>
                                           </VBox>
-                                          <VBox prefWidth="45.0">
+                                          <VBox prefWidth="45.0" spacing="30.0">
                                              <children>
                                                 <Label text="27 C">
                                                    <VBox.margin>
@@ -607,6 +631,9 @@
                                                    </VBox.margin>
                                                 </Label>
                                              </children>
+                                             <padding>
+                                                <Insets top="20.0" />
+                                             </padding>
                                           </VBox>
                                           <VBox prefHeight="200.0" prefWidth="75.0">
                                              <children>
@@ -626,7 +653,7 @@
                                                 <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.72" />
                                              </children>
                                           </VBox>
-                                          <VBox prefWidth="45.0">
+                                          <VBox prefWidth="45.0" spacing="30.0">
                                              <children>
                                                 <Label text="27 C">
                                                    <VBox.margin>
@@ -654,6 +681,9 @@
                                                    </VBox.margin>
                                                 </Label>
                                              </children>
+                                             <padding>
+                                                <Insets top="20.0" />
+                                             </padding>
                                           </VBox>
                                        </children>
                                     </HBox>

@@ -40,7 +40,7 @@ import main.UART;
 
 
 public class ChargingOverviewController {
-    int maxT = 35; //over maxT is temp text in red
+    int maxT = 60; //over maxT is temp text in red
     
     DateFormat dateFormat = new SimpleDateFormat("HH:mm");
     
