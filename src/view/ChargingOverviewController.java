@@ -137,7 +137,7 @@ public class ChargingOverviewController {
     
     @FXML
     private void handleRefresh(){
-        uart.searchForPorts();
+        uart.searchForPorts(canning);
     }
     
     @FXML
@@ -256,7 +256,7 @@ public class ChargingOverviewController {
     public void updatePortCombo(ObservableList<String> options) {
         portCombo.getItems().clear();
         portCombo.setItems(options);
-        portCombo.setValue(options.get(0)); //set CANbus as default selection
+        //portCombo.setValue(options.get(0)); //set first item as default selection
     }
 
     public void setUart(UART uart) {

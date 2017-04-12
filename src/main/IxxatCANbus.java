@@ -138,8 +138,7 @@ public class IxxatCANbus {
 
             // If more than one device ask user
             long lVciId = 0;
-            if(aoVciDeviceInfo.length != 1)
-            {
+            if(aoVciDeviceInfo.length > 1){
               try
               {
                 lVciId = oDeviceManager.SelectDeviceDialog();
@@ -153,15 +152,16 @@ public class IxxatCANbus {
                 lVciId = aoVciDeviceInfo[0].m_qwVciObjectId;
               }
             }
-            else
-              lVciId = aoVciDeviceInfo[0].m_qwVciObjectId;
+            else if (aoVciDeviceInfo.length == 1) {
+                lVciId = aoVciDeviceInfo[0].m_qwVciObjectId;
+                // Open VCI Device
+                oVciDevice = oDeviceManager.OpenDevice(lVciId);
+            }
 
-            // Open VCI Device
-            oVciDevice = oDeviceManager.OpenDevice(lVciId);
+            
 
             // Get Device Info and Capabilities
-            if(oVciDevice != null)
-            {
+            if(oVciDevice != null){
               VciDeviceCapabilities oVciDeviceCaps = null;
               VciDeviceInfo         oVciDeviceInfo = null;
 
@@ -170,11 +170,10 @@ public class IxxatCANbus {
 
               oVciDeviceInfo = oVciDevice.GetDeviceInfo();
               System.out.println("VCI Device Info: " + oVciDeviceInfo);
+           
+              // Open BAL Object
+              oBalObject = oVciDevice.OpenBusAccessLayer();
             }
-
-            // Open BAL Object
-            oBalObject = oVciDevice.OpenBusAccessLayer();
-
             // Free VciEnumDevice, DeviceManager and VCI Server which are not longer needed
             oVciEnumDevice.Dispose();
             oVciEnumDevice = null;
@@ -206,7 +205,7 @@ public class IxxatCANbus {
         else
             System.err.println("Exception: " + oException);
         }
-        initCan(oBalObject,(short)0);
+        if(oVciDevice != null) initCan(oBalObject,(short)0);
     }
     
     private void initCan(IBalObject oBalObject, short wSocketNumber){

@@ -52,11 +52,12 @@ public class Main extends Application {
         controller.appendLogWindow("Console opened... Select port and Connect.");
         
         uart = new UART(controller);
-        controller.setUart(uart);
-        uart.searchForPorts();
+        controller.setUart(uart);        
                 
         CANbus = new IxxatCANbus();
         controller.setCAN(CANbus);
+        
+        uart.searchForPorts(CANbus.oVciDevice!=null); //was can available or not
         
 //        for debugging only
 //        int[][] volts = new int[144][2];

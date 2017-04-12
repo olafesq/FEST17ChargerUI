@@ -26,12 +26,12 @@ public class UART {
         serialProtocol = new SerialProtocol();
     }
         
-    public void searchForPorts(){
+    public void searchForPorts(boolean canny){
         
         Enumeration ports = CommPortIdentifier.getPortIdentifiers();        
         List<String> list = new ArrayList<>();
         ObservableList<String> options = FXCollections.observableList(list); 
-        options.add("CANbus");
+        if (canny) options.add("CANbus"); //if can bus available, add to list
         
         while (ports.hasMoreElements()){           
             CommPortIdentifier curPort = (CommPortIdentifier)ports.nextElement();
