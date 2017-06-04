@@ -78,6 +78,8 @@ public class ChargingOverviewController {
     private ComboBox<String> portCombo;  
     @FXML 
     private TextArea infoText;
+    @FXML 
+    private Circle diod;
     @FXML
     private TextArea log; 
     @FXML
@@ -284,6 +286,10 @@ public class ChargingOverviewController {
                 else pBal.get(i).setVisible(false); 
             }  
         }); 
+    }
+    
+    public void blinkDiod(boolean blink){
+        diod.setVisible(blink);           
     }
     
     public void setTPogress(double progress){
