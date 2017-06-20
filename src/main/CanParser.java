@@ -68,4 +68,5 @@ public class CanParser {
         
         Main.controller.setTemp(temps); //Send new temps to UI
     }
+    
 }

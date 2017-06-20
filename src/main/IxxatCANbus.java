@@ -447,10 +447,71 @@ public class IxxatCANbus {
             else
               System.err.println("Exception: " + oException);
           }
+      canWriter();
 
     }
     
-    public void canReader(){
+    void canWriter(){
+        CanMessage  oTxCanMsg = new CanMessage();
+        long        qwMsgNo   = 0;
+        boolean     fEnd      = false;
+        boolean     fTimedOut = false;
+
+        // PreSet CAN Message
+        oTxCanMsg.m_abData        = new byte[]{(byte)0xff, 0x00, (byte)0xff, (byte)0xff, 0x00, 0x00, 0x00, (byte)0x00};
+        oTxCanMsg.m_bDataLength   = 8;
+        oTxCanMsg.m_dwIdentifier  = 0x6b1;
+        oTxCanMsg.m_dwTimestamp   = 0; // No Delay
+        oTxCanMsg.m_fExtendedFrameFormat        = false;
+        oTxCanMsg.m_fRemoteTransmissionRequest  = false;
+        oTxCanMsg.m_fSelfReception              = true;
+      
+        try
+        {
+          // Write CAN Message
+          // If WriteMessage fails, it throws an exception
+          oCanMsgWriter.WriteMessage(oTxCanMsg);
+
+          qwMsgNo++;
+          if(fTimedOut)
+          {
+            System.out.print("\n");
+            fTimedOut = false;
+          }
+          //System.out.println("No: " + qwMsgNo + " " + oCanMsg); //Scroll Mode
+          System.out.print("\rNo: " + qwMsgNo + " " + oTxCanMsg + "  "); //Overwrite Mode
+
+          // Prepare Message ID for next Message
+          oTxCanMsg.m_dwIdentifier++;
+          if(oTxCanMsg.m_dwIdentifier > 0x7ff)
+            oTxCanMsg.m_dwIdentifier = 0;
+        }
+        catch(Throwable oException)
+        {
+          //System.out.print("\r" + oException);
+          //Wait for empty space in the FIFO
+          try 
+          {
+            oCanMsgWriter.WaitFor(500);
+          }
+          catch(Throwable oThrowable)
+          {
+            if(!fTimedOut)
+            {
+              System.out.print("\n");
+              fTimedOut = true;
+            }
+            System.out.print(".");
+          }
+        }
+        
+    }
+    
+    public void canLooper(){
+        canReader();
+    }
+    
+    void canReader(){
         
         try{
             CanMessage  oCanMsg   = new CanMessage();
@@ -527,6 +588,7 @@ public class IxxatCANbus {
           else
             System.err.println("Exception: " + oException);
         }
+        
     }
 
     

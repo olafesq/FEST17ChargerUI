@@ -121,7 +121,7 @@ public class ChargingOverviewController {
         String selectedPort = (String)portCombo.getValue();   
         if ("CANbus".equals(selectedPort)){
             canning = true;
-            can.canReader();
+            can.canLooper();
         }
         else uart.connect(selectedPort);        
     }
@@ -292,13 +292,13 @@ public class ChargingOverviewController {
         diod.setVisible(blink);           
     }
     
-    public void setTPogress(double progress){
+    public void setTPogress(double progress){ //round total progress ring
         Platform.runLater(() -> {
         tProgress.setProgress(progress);
         });
     }
     
-    public void settLabel(String string){
+    public void settLabel(String string){ //label below total progress ring
         Platform.runLater(() -> {
             tLabel.setText(string);
         });
@@ -326,7 +326,7 @@ public class ChargingOverviewController {
     public void setTemp(int[] temp){
         List<Label> pTemp = getNodesOfType(pBarPane, Label.class);
         Platform.runLater(() -> { //Only FX thread can update UI text label
-            for (int i = 0; i < temp.length-3; i++){
+            for (int i = 0; i < temp.length; i++){
                 pTemp.get(i).setText(Integer.toString(temp[i])+" C");
                 if (temp[i]>=maxT) pTemp.get(i).setStyle("-fx-text-fill: red"); //highlights all cell above maxT
                 else pTemp.get(i).setStyle("-fx-text-fill: black");                

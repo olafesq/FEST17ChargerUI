@@ -78,7 +78,8 @@ public class SerialParser {
                 
                 if (row==nTemp){  //detect last row and send data to UI thread
                     btemp=false;
-                    Main.controller.setTemp(temp);
+                    int[] temp2 = Arrays.copyOfRange(temp, 0, nTemp-2); //send only temps of elements
+                    Main.controller.setTemp(temp2);
                     Main.controller.setMaxTempColor(isMaxTRow);
                     maxT = temp[nTemp-1]; //last element is maxT                   
                     //toConsole(temp.toString());
