@@ -446,26 +446,55 @@ public class IxxatCANbus {
             } 
             else
               System.err.println("Exception: " + oException);
-          }
-      canWriter();
-
+          }      
     }
     
-    void canWriter(){
+    public void canStartUp(){ //starts CAN reader thread and CAN writer thread to ask data        
+        
+            Thread readCan = new Thread(new canReader());
+                readCan.start();
+                Main.controller.appendLogWindow("Started listening to CAN..");
+            
+            Thread writeCan = new Thread(new canWriter());
+                writeCan.start();
+                if (Main.controller.bautoPoll) Main.controller.appendLogWindow("Started polling for V and Temp..");
+          
+              
+    }
+    
+    class canWriter implements Runnable{
+        byte[] askData = new byte[]{(byte)0xff, 0x00, (byte)0xff, (byte)0xff, 0x00, 0x00, 0x00, (byte)0x00};
+        int askID = 0x6b1;
+        
+        @Override
+        public void run() {       
+            while(Main.controller.canning){
+                try {
+                    if(Main.controller.bautoPoll) canWriter(askID, askData);//loop happens here
+
+                    Thread.sleep(Main.controller.aPollTime);
+                } catch (InterruptedException ex) {
+                    Main.controller.appendLogWindow("Err..Try again! "+ ex.toString());
+                }            
+            }
+        }
+    }    
+    
+    void canWriter(int askID, byte[] askThis){
         CanMessage  oTxCanMsg = new CanMessage();
         long        qwMsgNo   = 0;
         boolean     fEnd      = false;
         boolean     fTimedOut = false;
 
         // PreSet CAN Message
-        oTxCanMsg.m_abData        = new byte[]{(byte)0xff, 0x00, (byte)0xff, (byte)0xff, 0x00, 0x00, 0x00, (byte)0x00};
+        oTxCanMsg.m_abData        = askThis;
         oTxCanMsg.m_bDataLength   = 8;
-        oTxCanMsg.m_dwIdentifier  = 0x6b1;
+        oTxCanMsg.m_dwIdentifier  = askID;
         oTxCanMsg.m_dwTimestamp   = 0; // No Delay
         oTxCanMsg.m_fExtendedFrameFormat        = false;
         oTxCanMsg.m_fRemoteTransmissionRequest  = false;
         oTxCanMsg.m_fSelfReception              = true;
-      
+
         try
         {
           // Write CAN Message
@@ -504,93 +533,95 @@ public class IxxatCANbus {
             System.out.print(".");
           }
         }
-        
     }
+
     
-    public void canLooper(){
-        canReader();
-    }
-    
-    void canReader(){
-        
-        try{
-            CanMessage  oCanMsg   = new CanMessage();
-            long        qwMsgNo   = 0;
-            boolean     fEnd      = false;
-            boolean     fTimedOut = false;
+    class canReader implements Runnable{
+        @Override
+        public void run() {
+            while(Main.controller.canning) canReader();
+        }
+              
+        void canReader(){
 
-            System.out.println("\nPress <Enter> to exit reception mode\n");
-            do
-            {
-              try
-              {
-                // Read CAN Message
-                // If ReadMessage fails, it throws an exception
-                oCanMsg = oCanMsgReader.ReadMessage(oCanMsg);
+            try{
+                CanMessage  oCanMsg   = new CanMessage();
+                long        qwMsgNo   = 0;
+                boolean     fEnd      = false;
+                boolean     fTimedOut = false;
 
-                qwMsgNo++;
-                if(fTimedOut)
+                System.out.println("\nPress <Enter> to exit reception mode\n");
+                do
                 {
-                  System.out.print("\n");
-                  fTimedOut = false;
-                }
-                System.out.println("No: " + qwMsgNo + " " + oCanMsg); // Scroll mode
-                //System.out.print("\rNo: " + qwMsgNo + " " + oCanMsg + "  "); // Overwrite mode
-                int id = oCanMsg.m_dwIdentifier;
-                byte[] data = oCanMsg.m_abData;
-                canParser.parseMsg(id, data); //Send can messager to canParser
-              }
-              catch(Throwable oException)
-              {
-                //System.out.print("\r" + oException);
-
-                //Wait for a new message in the queue
-                try 
-                {
-                  oCanMsgReader.WaitFor(500);
-                }
-                catch(Throwable oThrowable)
-                {
-                  if(!fTimedOut)
+                  try
                   {
-                    System.out.print("\n");
-                    fTimedOut = true;
+                    // Read CAN Message
+                    // If ReadMessage fails, it throws an exception
+                    oCanMsg = oCanMsgReader.ReadMessage(oCanMsg);
+
+                    qwMsgNo++;
+                    if(fTimedOut)
+                    {
+                      System.out.print("\n");
+                      fTimedOut = false;
+                    }
+                    System.out.println("No: " + qwMsgNo + " " + oCanMsg); // Scroll mode
+                    //System.out.print("\rNo: " + qwMsgNo + " " + oCanMsg + "  "); // Overwrite mode
+                    int id = oCanMsg.m_dwIdentifier;
+                    byte[] data = oCanMsg.m_abData;
+                    canParser.parseMsg(id, data); //Send can messager to canParser
                   }
-                  System.out.print(".");
-                }
-              }
-              try
-              {
-                // User abort?
-                if(System.in.available() > 0)
-                {
-                  while(System.in.available() > 0)
-                    System.in.read();
-                  fEnd = true;
-                }
-              }
-              catch(IOException ioErr)
-              {
-                System.err.println("An IO Error occured: " + ioErr);
-                fEnd = true;
-              }
+                  catch(Throwable oException)
+                  {
+                    //System.out.print("\r" + oException);
 
-            }while(!fEnd);
+                    //Wait for a new message in the queue
+                    try 
+                    {
+                      oCanMsgReader.WaitFor(500);
+                    }
+                    catch(Throwable oThrowable)
+                    {
+                      if(!fTimedOut)
+                      {
+                        System.out.print("\n");
+                        fTimedOut = true;
+                      }
+                      System.out.print(".");
+                    }
+                  }
+                  try
+                  {
+                    // User abort?
+                    if(System.in.available() > 0)
+                    {
+                      while(System.in.available() > 0)
+                        System.in.read();
+                      fEnd = true;
+                    }
+                  }
+                  catch(IOException ioErr)
+                  {
+                    System.err.println("An IO Error occured: " + ioErr);
+                    fEnd = true;
+                  }
+
+                }while(!fEnd);
+
+            }
+            catch(Throwable oException)
+            {
+              if (oException instanceof VciException)
+              {
+                VciException oVciException = (VciException) oException;
+                System.err.println("VciException: " + oVciException + " => " + oVciException.VciFormatError());
+              } 
+              else
+                System.err.println("Exception: " + oException);
+            }
 
         }
-        catch(Throwable oException)
-        {
-          if (oException instanceof VciException)
-          {
-            VciException oVciException = (VciException) oException;
-            System.err.println("VciException: " + oVciException + " => " + oVciException.VciFormatError());
-          } 
-          else
-            System.err.println("Exception: " + oException);
-        }
-        
     }
-
     
     public void IxxatClose(){
         

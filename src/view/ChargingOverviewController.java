@@ -48,7 +48,7 @@ public class ChargingOverviewController {
     private UART uart;
     
     public boolean bautoPoll = true;
-    boolean canning = false;
+    public boolean canning = false;
     
     //ProgressBar helpers
     List<ProgressBar> pBar;
@@ -121,14 +121,17 @@ public class ChargingOverviewController {
         String selectedPort = (String)portCombo.getValue();   
         if ("CANbus".equals(selectedPort)){
             canning = true;
-            can.canLooper();
+            can.canStartUp();
         }
         else uart.connect(selectedPort);        
     }
     
     @FXML
     private void handleDisconnect(){
-        if(canning) can.IxxatClose();
+        if(canning) {
+            canning = false;
+            can.IxxatClose();
+        }
         else uart.disconnect();        
     }
     
