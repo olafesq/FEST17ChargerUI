@@ -29,6 +29,11 @@ public class IxxatCANbus {
     
     CanParser canParser = new CanParser();
     
+    int balancing = 0x00;
+    boolean bbalancing = false;
+    int reset = 0x00;
+    
+    
      // Create VCI Server Object
     VciServer         oVciServer      = null;
     IVciDeviceManager oDeviceManager  = null;
@@ -383,15 +388,16 @@ public class IxxatCANbus {
 //              // Filter closed completely
 //              oCanControl.SetAccFilter(ICanControl.CAN_FILTER_STD, 0xFFFF, 0xFFFF);
 //              // Filter opened completely
-//              oCanControl.SetAccFilter(ICanControl.CAN_FILTER_STD, 0, 0);
-//
+oCanControl.SetAccFilter(ICanControl.CAN_FILTER_STD, 0, 0);
+//              oCanControl.SetAccFilter(ICanControl.CAN_FILTER_STD, 0x0600, 0xf800);
+
 //              // Add ID 1
 //              oCanControl.AddFilterIds(ICanControl.CAN_FILTER_STD, 1, 0xFFFF);
 //              // Remove ID 1
 //              oCanControl.RemFilterIds(ICanControl.CAN_FILTER_STD, 1, 0xFFFF);
 
                 //Add filters ID's:0x500-0x5ff
-                oCanControl.AddFilterIds(ICanControl.CAN_FILTER_STD, 0x0500, 0xFF00);
+//                oCanControl.AddFilterIds(ICanControl.CAN_FILTER_STD, 0x0500, 0xFF00);
 
 
               // Start
@@ -407,38 +413,9 @@ public class IxxatCANbus {
               System.out.println("");
             }
 
-            // CAN Scheduler available
-//            if(oCanScheduler != null)
-//            {
-//              TestCanScheduler(oCanScheduler);
-//            }
-
-            // Read CAN Messages
-//            if(oCanMsgReader != null)
-//            {
-//              CanReader(oCanMsgReader);
-//            }
-//
-//            // Write CAN Messages
-//            if(oCanMsgWriter != null)
-//            {
-//              TestCanMessageWriter(oCanMsgWriter, oCanMsgReader);
-//
-//              // Release CAN Message Writer
-//              oCanMsgWriter.Dispose();
-//              oCanMsgWriter = null;
-//            }
-//
-//            // Dispose CAN Message Reader
-//            if(oCanMsgReader != null)
-//            {
-//              // Release CAN Message Reader
-//              oCanMsgReader.Dispose();
-//              oCanMsgReader = null;
-//            }
-          }
-          catch(Throwable oException)
-          {
+        }
+        catch(Throwable oException)
+        {
             if (oException instanceof VciException)
             {
               VciException oVciException = (VciException) oException;
@@ -446,33 +423,32 @@ public class IxxatCANbus {
             } 
             else
               System.err.println("Exception: " + oException);
-          }      
+        }      
     }
     
     public void canStartUp(){ //starts CAN reader thread and CAN writer thread to ask data        
         
-            Thread readCan = new Thread(new canReader());
-                readCan.start();
-                Main.controller.appendLogWindow("Started listening to CAN..");
-            
-            Thread writeCan = new Thread(new canWriter());
-                writeCan.start();
-                if (Main.controller.bautoPoll) Main.controller.appendLogWindow("Started polling for V and Temp..");
-          
-              
+        Thread readCan = new Thread(new canReader());
+            readCan.start();
+            Main.controller.appendLogWindow("Started listening to CAN..");
+
+        Thread writeCan = new Thread(new canWriter());
+            writeCan.start();
+            if (Main.controller.bautoPoll) Main.controller.appendLogWindow("Started polling for V and Temp..");
     }
     
-    class canWriter implements Runnable{
-        byte[] askData = new byte[]{(byte)0xff, 0x00, (byte)0xff, (byte)0xff, 0x00, 0x00, 0x00, (byte)0x00};
+    class canWriter implements Runnable{     
         int askID = 0x6b1;
         
         @Override
         public void run() {       
             while(Main.controller.canning){
                 try {
+                    byte[] askData = new byte[]{(byte)balancing, (byte)reset, (byte)0xff, (byte)0xff, (byte)0xff, 0x00, 0x00, 0x00};
                     if(Main.controller.bautoPoll) canWriter(askID, askData);//loop happens here
-
-                    Thread.sleep(Main.controller.aPollTime);
+                    reset = 0x00;
+                    
+                    Thread.sleep(Main.controller.aPollTime);                    
                 } catch (InterruptedException ex) {
                     Main.controller.appendLogWindow("Err..Try again! "+ ex.toString());
                 }            
@@ -542,16 +518,16 @@ public class IxxatCANbus {
             while(Main.controller.canning) canReader();
         }
               
-        void canReader(){
+        void canReader(){ //everything is sent to can parser from here
 
             try{
                 CanMessage  oCanMsg   = new CanMessage();
                 long        qwMsgNo   = 0;
-                boolean     fEnd      = false;
+                //boolean     fEnd      = false;
                 boolean     fTimedOut = false;
 
-                System.out.println("\nPress <Enter> to exit reception mode\n");
-                do
+                //System.out.println("\nPress <Enter> to exit reception mode\n");
+                // do
                 {
                   try
                   {
@@ -590,23 +566,24 @@ public class IxxatCANbus {
                       System.out.print(".");
                     }
                   }
-                  try
-                  {
-                    // User abort?
-                    if(System.in.available() > 0)
-                    {
-                      while(System.in.available() > 0)
-                        System.in.read();
-                      fEnd = true;
-                    }
-                  }
-                  catch(IOException ioErr)
-                  {
-                    System.err.println("An IO Error occured: " + ioErr);
-                    fEnd = true;
-                  }
+//                  try
+//                  {
+//                    // User abort?
+//                    if(System.in.available() > 0)
+//                    {
+//                      while(System.in.available() > 0)
+//                        System.in.read();
+//                      fEnd = true;
+//                    }
+//                  }
+//                  catch(IOException ioErr)
+//                  {
+//                    System.err.println("An IO Error occured: " + ioErr);
+//                    fEnd = true;
+//                  }
 
-                }while(!fEnd);
+                }
+                //while(!fEnd);
 
             }
             catch(Throwable oException)
@@ -687,5 +664,15 @@ public class IxxatCANbus {
         }
 
         System.out.println("Program finished!");
+    }
+
+    public void toggleBalance(){
+        bbalancing = !bbalancing;   
+        if(bbalancing) balancing = 0xff;
+        else balancing = 0x00;
+    }
+    
+    public void hitReset(){
+        reset = 0xff;
     }
 }

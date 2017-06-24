@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -22,11 +23,13 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Pane;
@@ -34,6 +37,7 @@ import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.StageStyle;
+import javafx.util.Pair;
 import main.CSVUtils;
 import main.IxxatCANbus;
 import main.UART;
@@ -113,7 +117,7 @@ public class ChargingOverviewController {
     @FXML
     private CheckBox autoRange;
     @FXML 
-    private NumberAxis xTelg;
+    private NumberAxis yTelg;
 
     //Handles
     @FXML
@@ -137,6 +141,7 @@ public class ChargingOverviewController {
     
     @FXML
     private void handleReset(){
+        can.hitReset();
         uart.reset();
     }
     
@@ -156,6 +161,7 @@ public class ChargingOverviewController {
     private void handleBalance(){
        //boolean selected = vent.selectedProperty().get();
        //vent.setSelected(!selected);
+       can.toggleBalance();
        uart.toggleBalance();
     }
     @FXML
@@ -173,12 +179,27 @@ public class ChargingOverviewController {
     
     @FXML
     private void handleAutoRange(){
-        xTelg.setAutoRanging(!xTelg.isAutoRanging()); //toggle autoRange value
-        if (!xTelg.isAutoRanging()) { //if autoRange is off, set back to degault bounds
-            xTelg.setUpperBound(4.3);
-            xTelg.setLowerBound(3.2);
-            xTelg.setTickUnit(0.1);
+        yTelg.setAutoRanging(!yTelg.isAutoRanging()); //toggle autoRange value
+        if (!yTelg.isAutoRanging()) { //if autoRange is off, set back to degault bounds
+            yTelg.setUpperBound(4.3);
+            yTelg.setLowerBound(3.2);
+            yTelg.setTickUnit(0.1);
         } 
+    }
+    
+    @FXML
+    private void handleXaxisClick(){        
+        Dialog<Pair<Float, Float>> dialog = new Dialog<>();
+        dialog.initStyle(StageStyle.UTILITY);
+        dialog.setTitle("Y-telje vahemik");
+        dialog.setHeaderText("Sisesta soovitud Y-telje vahemik.");
+        dialog.setContentText("minV:");
+
+        Optional<Pair<Float, Float>> result = dialog.showAndWait();
+        if (result.isPresent()){
+            System.out.println("Your name: " + result.get());
+        }
+
     }
     
     @FXML
@@ -329,7 +350,7 @@ public class ChargingOverviewController {
     public void setTemp(int[] temp){
         List<Label> pTemp = getNodesOfType(pBarPane, Label.class);
         Platform.runLater(() -> { //Only FX thread can update UI text label
-            for (int i = 0; i < temp.length; i++){
+            for (int i = 0; i < pTemp.size(); i++){
                 pTemp.get(i).setText(Integer.toString(temp[i])+" C");
                 if (temp[i]>=maxT) pTemp.get(i).setStyle("-fx-text-fill: red"); //highlights all cell above maxT
                 else pTemp.get(i).setStyle("-fx-text-fill: black");                
@@ -392,4 +413,12 @@ public class ChargingOverviewController {
         }); 
     }
     
+    public void setXHint(){
+        Platform.runLater(() -> {
+            Tooltip hint = new Tooltip();
+                hint.setText("Kliki et y-telge muuta.");
+                
+                   
+        }); 
+    }
 }

@@ -1,5 +1,6 @@
 package main;
 //This main class start the JavaFX GUI, and calls to check for available ports
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -50,6 +51,18 @@ public class Main extends Application {
         
         controller.appendLogWindow("Date: "+dateFormat.format(date)); //datestamp
         controller.appendLogWindow("Console opened... Select port and Connect.");
+        
+        //Kustuta start!
+//        byte[] proovB = new byte[]{(byte)0x92, (byte)0x0B, (byte)0x90, (byte)0x04, (byte)0x91, (byte)0x23, (byte)0x17, (byte)0x16};
+//        float[] dpoint = new float[5];
+//        
+//        dpoint[0] = concatByte(proovB, 0);
+//        dpoint[1] = concatByte(proovB, 2);
+//        dpoint[2] = concatByte(proovB, 4);
+//        dpoint[3] = proovB[5];
+//        dpoint[4] = proovB[6];        
+//        System.out.println(dpoint[0] + " # " + dpoint[1] + " " + dpoint[2]+ " " + dpoint[3]+" " + dpoint[4]);
+//        //Kustuta end!
         
         uart = new UART(controller);
         controller.setUart(uart);        
@@ -113,6 +126,11 @@ public class Main extends Application {
         }    
     }
    
+    float concatByte(byte[] partB, int pos){
+        int buffer = partB[pos];
+        buffer = buffer << 8 | partB[pos+1]; //bitshift left + bitwise inclusive OR
+    return (buffer & 0x0000ffff)/10000f; //biwise and bitmask, otherwise FF infront        
+    }
 }
     
     

@@ -74,7 +74,7 @@
                   </VBox>
                   <Pane minWidth="-Infinity" prefHeight="168.0" prefWidth="246.0">
                      <children>
-                        <TextArea fx:id="infoText" editable="false" focusTraversable="false" layoutX="35.0" layoutY="37.0" mouseTransparent="true" prefHeight="128.0" prefWidth="163.0" text="max V:&#9;0.0&#10;min V:&#9;0.0&#10;avg V:&#9;0.0&#10;max T:&#9;0 C">
+                        <TextArea fx:id="infoText" editable="false" focusTraversable="false" layoutX="35.0" layoutY="37.0" prefHeight="128.0" prefWidth="163.0" text="max V:&#9;0.0&#10;min V:&#9;0.0&#10;avg V:&#9;0.0&#10;max T:&#9;0 C">
                            <font>
                               <Font size="19.0" />
                            </font>
@@ -115,7 +115,7 @@
                      <content>
                         <VBox prefHeight="200.0">
                            <children>
-                              <HBox prefWidth="1130.0" spacing="10.0">
+                              <HBox prefWidth="1130.0" spacing="30.0">
                                  <children>
                                     <Label layoutX="52.0" layoutY="413.0" prefWidth="120.0" text="Module 1" />
                                     <Label layoutX="175.0" layoutY="413.0" prefWidth="120.0" text="Module 2" />
@@ -164,7 +164,7 @@
                                                 <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.6" />
                                              </children>
                                           </VBox>
-                                          <VBox prefWidth="55.0" spacing="37.0">
+                                          <VBox prefWidth="75.0" spacing="37.0">
                                              <children>
                                                 <Label text="28 C">
                                                    <VBox.margin>
@@ -230,7 +230,7 @@
                                                 <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.66" />
                                              </children>
                                           </VBox>
-                                          <VBox prefWidth="55.0" spacing="37.0">
+                                          <VBox prefWidth="75.0" spacing="37.0">
                                              <children>
                                                 <Label text="27 C">
                                                    <VBox.margin>
@@ -296,7 +296,7 @@
                                                 <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.66" />
                                              </children>
                                           </VBox>
-                                          <VBox prefWidth="55.0" spacing="37.0">
+                                          <VBox prefWidth="75.0" spacing="37.0">
                                              <children>
                                                 <Label text="27 C">
                                                    <VBox.margin>
@@ -359,7 +359,7 @@
                                                 <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.66" />
                                              </children>
                                           </VBox>
-                                          <VBox prefWidth="55.0" spacing="37.0">
+                                          <VBox prefWidth="75.0" spacing="37.0">
                                              <children>
                                                 <Label text="27 C">
                                                    <VBox.margin>
@@ -422,7 +422,7 @@
                                                 <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.66" />
                                              </children>
                                           </VBox>
-                                          <VBox prefWidth="55.0" spacing="37.0">
+                                          <VBox prefWidth="75.0" spacing="37.0">
                                              <children>
                                                 <Label text="27 C">
                                                    <VBox.margin>
@@ -485,7 +485,7 @@
                                                 <ProgressBar prefHeight="10.0" prefWidth="75.0" progress="0.66" />
                                              </children>
                                           </VBox>
-                                          <VBox prefWidth="55.0" spacing="37.0">
+                                          <VBox prefWidth="75.0" spacing="37.0">
                                              <children>
                                                 <Label text="27 C">
                                                    <VBox.margin>
@@ -556,7 +556,7 @@
                                                 <Circle fill="#3bff26" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
                                              </children>
                                           </VBox>
-                                          <VBox prefWidth="55.0" />
+                                          <VBox prefWidth="75.0" />
                                           <VBox prefHeight="252.0" prefWidth="75.0" spacing="8.0">
                                              <children>
                                                 <Circle fill="#3bff26" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5">
@@ -589,7 +589,7 @@
                                                 <Circle fill="#3bff26" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
                                              </children>
                                           </VBox>
-                                          <VBox prefWidth="55.0" />
+                                          <VBox prefWidth="75.0" />
                                           <VBox prefHeight="252.0" prefWidth="75.0" spacing="8.0">
                                              <children>
                                                 <Circle fill="#3bff26" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5">
@@ -622,7 +622,7 @@
                                                 <Circle fill="#3bff26" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
                                              </children>
                                           </VBox>
-                                          <VBox prefWidth="55.0" />
+                                          <VBox prefWidth="75.0" />
                                           <VBox prefHeight="252.0" prefWidth="75.0" spacing="8.0">
                                              <children>
                                                 <Circle fill="#3bff26" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5">
@@ -655,7 +655,7 @@
                                                 <Circle fill="#3bff26" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
                                              </children>
                                           </VBox>
-                                          <VBox prefWidth="55.0" />
+                                          <VBox prefWidth="75.0" />
                                           <VBox prefHeight="252.0" prefWidth="75.0" spacing="8.0">
                                              <children>
                                                 <Circle fill="#3bff26" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5">
@@ -688,7 +688,7 @@
                                                 <Circle fill="#3bff26" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
                                              </children>
                                           </VBox>
-                                          <VBox prefWidth="55.0" />
+                                          <VBox prefWidth="75.0" />
                                           <VBox prefHeight="252.0" prefWidth="75.0" spacing="8.0">
                                              <children>
                                                 <Circle fill="#3bff26" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5">
@@ -762,7 +762,7 @@
                                   <NumberAxis minorTickCount="1" minorTickLength="1.0" side="BOTTOM" tickUnit="1.0" upperBound="2000.0" />
                                 </xAxis>
                                 <yAxis>
-                                  <NumberAxis autoRanging="false" forceZeroInRange="false" lowerBound="3.2" minorTickCount="2" side="LEFT" tickUnit="0.1" upperBound="4.3" fx:id="xTelg" />
+                                  <NumberAxis fx:id="yTelg" autoRanging="false" forceZeroInRange="false" lowerBound="3.2" minorTickCount="2" onMouseClicked="#handleXaxisClick" side="LEFT" tickUnit="0.1" upperBound="4.3" />
                                 </yAxis>
                                  <VBox.margin>
                                     <Insets />

@@ -15,25 +15,26 @@ public class CanParser {
     
    
     void parseMsg(int id, byte[] data){ // "Timestamp: 875467195 Flags:      ID: 0x00000294 Data: 0xF8 0x00 0xC0 0x00 0x00 0x00 0xC0 0x00"
-        //int idP = msg.indexOf("ID")+3;
-        //int dataP = msg.indexOf("Data")+6;
-        //String idString = msg.substring(idP, dataP-1);
-        //byte id[] = idString.getBytes(StandardCharsets.UTF_8);
-        //String dataString = msg.substring(dataP);
-        //byte data1[] = dataString.getBytes(StandardCharsets.UTF_8); //parse data into byte array
-        //byte data2[] = DatatypeConverter.parseHexBinary(dataString); //parse data into byte array
-        
+     
         Main.controller.appendLogWindow(String.valueOf(id)+" & data: "+ String.valueOf(data));
                 
         //Sort message by ID and put voltages into voltage table, temps to temps table
         if (id>=0x61a && id<=0x66f) setVoltages(id, data);
         else if (id>=0x6a1 && id<=0x6ac) setTemps(id, data);
-        else if (id == 0x600){ //Info text        
-//            String maxV = String.format("%.2f",dpoint[2])
-//            String.format("%.2f",dpoint[1])  
-//                String.format("%.2f",dpoint[0])  
-//                Integer.toString(maxT)); //two decimal points
-//            Main.controller.setInfoText(maxV, minV, avgV, maxT);
+        else if (id == 0x600){ //Info text
+            float[] dpoint = new float[5];
+                dpoint[0] = concatByte(data, 0);
+                dpoint[1] = concatByte(data, 2);
+                dpoint[2] = concatByte(data, 4);
+                dpoint[3] = data[5];
+                dpoint[4] = data[6];   
+            
+            String maxV = String.format("%.2f",dpoint[0]);//two decimal points
+            String minV = String.format("%.2f",dpoint[1]);  
+            String avgV = String.format("%.2f",dpoint[2]);  
+            String maxT = String.format("%.0f",dpoint[3]);
+            String minT = String.format("%.0f",dpoint[4]);
+            Main.controller.setInfoText(maxV, minV, avgV, maxT);
         }
         else  if (id == 0x605) ; //Battery V, etc
         
@@ -67,6 +68,12 @@ public class CanParser {
         }
         
         Main.controller.setTemp(temps); //Send new temps to UI
+    }
+    
+    float concatByte(byte[] partB, int pos){ //helper to concatenate Bytes
+        int buffer = partB[pos];
+        buffer = buffer << 8 | partB[pos+1]; //bitshift left + bitwise inclusive OR
+    return (buffer & 0x0000ffff)/10000f; //biwise and bitmask, otherwise FF infront        
     }
     
 }
