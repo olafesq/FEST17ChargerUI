@@ -14,6 +14,7 @@ import java.util.Optional;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -21,6 +22,8 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
@@ -29,15 +32,18 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.StageStyle;
 import javafx.util.Pair;
+import javafx.util.converter.NumberStringConverter;
 import main.CSVUtils;
 import main.IxxatCANbus;
 import main.UART;
@@ -180,7 +186,7 @@ public class ChargingOverviewController {
     @FXML
     private void handleAutoRange(){
         yTelg.setAutoRanging(!yTelg.isAutoRanging()); //toggle autoRange value
-        if (!yTelg.isAutoRanging()) { //if autoRange is off, set back to degault bounds
+        if (!yTelg.isAutoRanging()) { //if autoRange is off, set back to default bounds
             yTelg.setUpperBound(4.3);
             yTelg.setLowerBound(3.2);
             yTelg.setTickUnit(0.1);
@@ -188,16 +194,51 @@ public class ChargingOverviewController {
     }
     
     @FXML
-    private void handleXaxisClick(){        
+    private void handleYaxisClick(){        
         Dialog<Pair<Float, Float>> dialog = new Dialog<>();
         dialog.initStyle(StageStyle.UTILITY);
-        dialog.setTitle("Y-telje vahemik");
+        //dialog.setTitle("Y-telje vahemik");
         dialog.setHeaderText("Sisesta soovitud Y-telje vahemik.");
-        dialog.setContentText("minV:");
+        
+        // Set the button types.
+        ButtonType loginButtonType = new ButtonType("OK", ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+
+        // Create the username and password labels and fields.
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField yMax = new TextField();
+        yMax.setTextFormatter(new TextFormatter<>(new NumberStringConverter())); //allows olny number input
+        yMax.setText("4.3");
+        TextField yMin = new TextField();
+        yMin.setTextFormatter(new TextFormatter<>(new NumberStringConverter()));
+        yMin.setText("3.2");
+
+        grid.add(new Label("Y max:"), 0, 0);
+        grid.add(yMax, 1, 0);
+        grid.add(new Label("Y min:"), 0, 1);
+        grid.add(yMin, 1, 1);
+        
+        dialog.getDialogPane().setContent(grid);
+                
+        // Request focus on the username field by default.
+        Platform.runLater(() -> yMax.requestFocus());
 
         Optional<Pair<Float, Float>> result = dialog.showAndWait();
         if (result.isPresent()){
-            System.out.println("Your name: " + result.get());
+            if(yTelg.isAutoRanging()){
+                yTelg.setAutoRanging(false);
+                autoRange.setSelected(false);                
+            }
+            
+            double yMx = Double.parseDouble(yMax.getText());
+            double yMn = Double.parseDouble(yMin.getText());
+            yTelg.setUpperBound(yMx);
+            yTelg.setLowerBound(yMn);
+            yTelg.setTickUnit(0.1);            
         }
 
     }
@@ -413,11 +454,11 @@ public class ChargingOverviewController {
         }); 
     }
     
-    public void setXHint(){
+    public void setYHint(){
         Platform.runLater(() -> {
             Tooltip hint = new Tooltip();
                 hint.setText("Kliki et y-telge muuta.");
-                
+     //           hint.show(yTelg);
                    
         }); 
     }

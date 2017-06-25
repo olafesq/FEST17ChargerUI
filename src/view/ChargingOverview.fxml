@@ -762,7 +762,7 @@
                                   <NumberAxis minorTickCount="1" minorTickLength="1.0" side="BOTTOM" tickUnit="1.0" upperBound="2000.0" />
                                 </xAxis>
                                 <yAxis>
-                                  <NumberAxis fx:id="yTelg" autoRanging="false" forceZeroInRange="false" lowerBound="3.2" minorTickCount="2" onMouseClicked="#handleXaxisClick" side="LEFT" tickUnit="0.1" upperBound="4.3" />
+                                  <NumberAxis fx:id="yTelg" autoRanging="false" forceZeroInRange="false" lowerBound="3.2" minorTickCount="2" onMouseClicked="#handleYaxisClick" side="LEFT" tickUnit="0.1" upperBound="4.3" />
                                 </yAxis>
                                  <VBox.margin>
                                     <Insets />
@@ -773,7 +773,7 @@
                               </LineChart>
                               <VBox prefHeight="200.0" prefWidth="100.0" spacing="30.0">
                                  <children>
-                                    <CheckBox mnemonicParsing="false" onAction="#handleAutoRange" text="Auto Range">
+                                    <CheckBox fx:id="autoRange" mnemonicParsing="false" onAction="#handleAutoRange" text="Auto Range">
                                        <opaqueInsets>
                                           <Insets />
                                        </opaqueInsets>

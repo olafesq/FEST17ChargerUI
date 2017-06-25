@@ -20,12 +20,16 @@ public class CanParser {
                 
         //Sort message by ID and put voltages into voltage table, temps to temps table
         if (id>=0x61a && id<=0x66f) setVoltages(id, data);
+        
         else if (id>=0x6a1 && id<=0x6ac) setTemps(id, data);
+        
+        else if (id == 0x6b0) BMSerror(id, data);
+        
         else if (id == 0x600){ //Info text
             float[] dpoint = new float[5];
-                dpoint[0] = concatByte(data, 0);
-                dpoint[1] = concatByte(data, 2);
-                dpoint[2] = concatByte(data, 4);
+                dpoint[0] = concatByte(data, 0)/10000f;
+                dpoint[1] = concatByte(data, 2)/10000f;
+                dpoint[2] = concatByte(data, 4)/10000f;
                 dpoint[3] = data[5];
                 dpoint[4] = data[6];   
             
@@ -41,15 +45,15 @@ public class CanParser {
     }
     
     void setVoltages(int id, byte[] data){ //each ID has data of 4 cells
-        int vHelper1 = Integer.parseUnsignedInt(String.valueOf(data[0]) + String.valueOf(data[1]));
-        int vHelper2 = Integer.parseUnsignedInt(String.valueOf(data[2]) + String.valueOf(data[3]));
-        int vHelper3 = Integer.parseUnsignedInt(String.valueOf(data[4]) + String.valueOf(data[5]));
-        int vHelper4 = Integer.parseUnsignedInt(String.valueOf(data[6]) + String.valueOf(data[7]));
+        int vBuffer1 = concatByte(data, 0);
+        int vBuffer2 = concatByte(data, 2);
+        int vBuffer3 = concatByte(data, 4);
+        int vBuffer4 = concatByte(data, 6);
         
-        voltages[(id-0x61a)*4]   = vHelper1;
-        voltages[(id-0x61a)*4+1] = vHelper2;
-        voltages[(id-0x61a)*4+2] = vHelper3;
-        voltages[(id-0x61a)*4+3] = vHelper4;    
+        voltages[(id-0x61a)*4]   = vBuffer1;
+        voltages[(id-0x61a)*4+1] = vBuffer2;
+        voltages[(id-0x61a)*4+2] = vBuffer3;
+        voltages[(id-0x61a)*4+3] = vBuffer4;    
         
         calcVProgress(); 
     }
@@ -70,10 +74,16 @@ public class CanParser {
         Main.controller.setTemp(temps); //Send new temps to UI
     }
     
-    float concatByte(byte[] partB, int pos){ //helper to concatenate Bytes
+    int concatByte(byte[] partB, int pos){ //helper to concatenate Bytes
         int buffer = partB[pos];
         buffer = buffer << 8 | partB[pos+1]; //bitshift left + bitwise inclusive OR
-    return (buffer & 0x0000ffff)/10000f; //biwise and bitmask, otherwise FF infront        
+    return (buffer & 0x0000ffff); //biwise and bitmask, otherwise FF infront        
+    }
+
+    void BMSerror(int id, byte[] data) {
+        Main.controller.appendLogWindow("BMS error recieved!");
+        Main.controller.appendLogWindow(String.valueOf(id)+" & data: "+ String.valueOf(data[0]));
+        
     }
     
 }

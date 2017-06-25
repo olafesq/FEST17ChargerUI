@@ -388,8 +388,8 @@ public class IxxatCANbus {
 //              // Filter closed completely
 //              oCanControl.SetAccFilter(ICanControl.CAN_FILTER_STD, 0xFFFF, 0xFFFF);
 //              // Filter opened completely
-oCanControl.SetAccFilter(ICanControl.CAN_FILTER_STD, 0, 0);
-//              oCanControl.SetAccFilter(ICanControl.CAN_FILTER_STD, 0x0600, 0xf800);
+//                oCanControl.SetAccFilter(ICanControl.CAN_FILTER_STD, 0, 0); //data and mask
+                oCanControl.SetAccFilter(ICanControl.CAN_FILTER_STD, 0x0600, 0xff00);
 
 //              // Add ID 1
 //              oCanControl.AddFilterIds(ICanControl.CAN_FILTER_STD, 1, 0xFFFF);
