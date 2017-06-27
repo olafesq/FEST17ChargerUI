@@ -65,6 +65,8 @@ public class ChargingOverviewController {
     List<Circle> pBal;
     String defaultBarStyle;
     boolean getStyle = true;   
+    public boolean brescalePBar = false;
+    boolean once = true;
     int oldRow = 0;
     
     public int aPollTime = 2500; //Default 5sec interval for 2 things
@@ -116,6 +118,7 @@ public class ChargingOverviewController {
     private TextField autoPollTime;
     
     //Chart Tab
+    public Tooltip yHint = new Tooltip();
     @FXML
     private LineChart graafik;
     @FXML
@@ -175,6 +178,10 @@ public class ChargingOverviewController {
        uart.toggleVent();
     }
     @FXML
+    private void handlePBarScale(){
+        brescalePBar = !brescalePBar;       
+    }
+    @FXML
     private void toggleAutoPoll(){        
         bautoPoll = !bautoPoll;
     }
@@ -194,7 +201,7 @@ public class ChargingOverviewController {
     }
     
     @FXML
-    private void handleYaxisClick(){        
+    private void handleYaxisClick(){   //pop-up dialoog for y axis on chart    
         Dialog<Pair<Float, Float>> dialog = new Dialog<>();
         dialog.initStyle(StageStyle.UTILITY);
         //dialog.setTitle("Y-telje vahemik");
@@ -455,11 +462,25 @@ public class ChargingOverviewController {
     }
     
     public void setYHint(){
-        Platform.runLater(() -> {
-            Tooltip hint = new Tooltip();
-                hint.setText("Kliki et y-telge muuta.");
-     //           hint.show(yTelg);
-                   
-        }); 
+        Platform.runLater(() -> {            
+            yHint.setText("Kliki et y-telge muuta.");
+            yHint.setAutoHide(true);
+            yHint.show(yTelg.getScene().getWindow(), yTelg.getWidth(), yTelg.getHeight());
+        });        
+    } 
+    
+    public void killHint(){yHint.hide();}
+    
+    public void setPBarHint(){
+        if(once){ //show hint only once
+        Tooltip PBarHint = new Tooltip();
+        Platform.runLater(() -> {            
+            PBarHint.setText("Kliki graafika muutmiseks.");
+            PBarHint.setAutoHide(true);
+            //pBar.get(1).setTooltip(PBarHint);
+            PBarHint.show(pBarPane.getScene().getWindow(), 100, pBarPane.getHeight());
+        });
+        once = false;
+        }
     }
 }

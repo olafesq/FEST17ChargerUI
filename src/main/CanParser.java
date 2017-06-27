@@ -8,8 +8,9 @@ public class CanParser {
     int nCells = 6*24;//
     int[] temps = new int[72]; //array of temps, 8*6 + 24
     int minVcell = 32000;
+    int minVcellAct = 32000;
     int maxVcell = 42000;
-    
+     
     int[] voltages = new int[nCells]; //array to hold voltages
     double[] vProgress = new double[nCells]; //array to hold V progress bar values 
     
@@ -29,6 +30,7 @@ public class CanParser {
             float[] dpoint = new float[5];
                 dpoint[0] = concatByte(data, 0)/10000f;
                 dpoint[1] = concatByte(data, 2)/10000f;
+                    minVcellAct = concatByte(data, 2);
                 dpoint[2] = concatByte(data, 4)/10000f;
                 dpoint[3] = data[5];
                 dpoint[4] = data[6];   
@@ -59,8 +61,10 @@ public class CanParser {
     }
     
     void calcVProgress(){ //re-calculate progress bar values
+        int minVcll = minVcell; 
+        if (Main.controller.brescalePBar) minVcll = minVcellAct;
         for (int i=0; i==nCells; i++){
-         vProgress[i] = (voltages[i] - minVcell) / (double)(maxVcell - minVcell);                     
+         vProgress[i] = (voltages[i] - minVcll) / (double)(maxVcell - minVcll);                     
         }
         
         Main.controller.setProgressBar(vProgress); //Send new progressbar values to UI    
@@ -83,7 +87,7 @@ public class CanParser {
     void BMSerror(int id, byte[] data) {
         Main.controller.appendLogWindow("BMS error recieved!");
         Main.controller.appendLogWindow(String.valueOf(id)+" & data: "+ String.valueOf(data[0]));
-        
+                
     }
     
 }

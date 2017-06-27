@@ -115,7 +115,7 @@
                      <content>
                         <VBox prefHeight="200.0">
                            <children>
-                              <HBox prefWidth="1130.0" spacing="30.0">
+                              <HBox onMouseEntered="#setPBarHint" prefWidth="1130.0" spacing="30.0">
                                  <children>
                                     <Label layoutX="52.0" layoutY="413.0" prefWidth="120.0" text="Module 1" />
                                     <Label layoutX="175.0" layoutY="413.0" prefWidth="120.0" text="Module 2" />
@@ -130,7 +130,7 @@
                               </HBox>
                               <StackPane minWidth="-Infinity" prefHeight="252.0" prefWidth="390.0">
                                  <children>
-                                    <HBox fx:id="pBarPane" disable="true" prefHeight="252.0" prefWidth="1130.0">
+                                    <HBox fx:id="pBarPane" disable="true" onMouseClicked="#handlePBarScale" prefHeight="252.0" prefWidth="1130.0">
                                        <children>
                                           <VBox prefHeight="252.0" prefWidth="75.0">
                                              <children>
@@ -762,7 +762,7 @@
                                   <NumberAxis minorTickCount="1" minorTickLength="1.0" side="BOTTOM" tickUnit="1.0" upperBound="2000.0" />
                                 </xAxis>
                                 <yAxis>
-                                  <NumberAxis fx:id="yTelg" autoRanging="false" forceZeroInRange="false" lowerBound="3.2" minorTickCount="2" onMouseClicked="#handleYaxisClick" side="LEFT" tickUnit="0.1" upperBound="4.3" />
+                                  <NumberAxis fx:id="yTelg" autoRanging="false" forceZeroInRange="false" lowerBound="3.2" minorTickCount="2" onMouseClicked="#handleYaxisClick" onMouseEntered="#setYHint" onMouseExited="#killHint" side="LEFT" tickUnit="0.1" upperBound="4.3" />
                                 </yAxis>
                                  <VBox.margin>
                                     <Insets />
