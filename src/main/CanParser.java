@@ -7,6 +7,8 @@ package main;
 public class CanParser {
     int nCells = 6*24;//
     int[] temps = new int[72]; //array of temps, 8*6 + 24
+    int minV = 4480000;
+    int maxV = 5880000;
     int minVcell = 32000;
     int minVcellAct = 32000;
     int maxVcell = 42000;
@@ -42,7 +44,10 @@ public class CanParser {
             String minT = String.format("%.0f",dpoint[4]);
             Main.controller.setInfoText(maxV, minV, avgV, maxT);
         }
-        else  if (id == 0x605) ; //Battery V, etc
+        else  if (id == 0x605) {//Battery V, etc
+            int voltBat = concatByte(data,0);
+            calcTProgress(voltBat);
+        }
         
     }
     
@@ -78,16 +83,25 @@ public class CanParser {
         Main.controller.setTemp(temps); //Send new temps to UI
     }
     
-    int concatByte(byte[] partB, int pos){ //helper to concatenate Bytes
-        int buffer = partB[pos];
-        buffer = buffer << 8 | partB[pos+1]; //bitshift left + bitwise inclusive OR
-    return (buffer & 0x0000ffff); //biwise and bitmask, otherwise FF infront        
+    void calcTProgress(int voltBat){ //the round total progress circle
+        double tProgress =  (voltBat-minV)/(double)(maxV-minV);
+        Main.controller.setTPogress(tProgress);
+        //toConsole(Integer.toString(voltBalan[nCells-1-2][0]));
+        
+        int tLabel = voltBat/10000;
+        Main.controller.settLabel(Integer.toString(tLabel)+"/"+ Integer.toString(maxV/10000));
+        //toConsole(Integer.toString(tLabel));
     }
-
+    
     void BMSerror(int id, byte[] data) {
         Main.controller.appendLogWindow("BMS error recieved!");
         Main.controller.appendLogWindow(String.valueOf(id)+" & data: "+ String.valueOf(data[0]));
                 
     }
     
+    int concatByte(byte[] partB, int pos){ //helper to concatenate Bytes
+        int buffer = partB[pos];
+        buffer = buffer << 8 | partB[pos+1]; //bitshift left + bitwise inclusive OR
+    return (buffer & 0x0000ffff); //biwise and bitmask, otherwise FF infront        
+    }
 }

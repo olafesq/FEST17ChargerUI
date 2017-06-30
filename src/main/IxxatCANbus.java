@@ -21,7 +21,6 @@ import de.ixxat.vci3.bal.can.ICanMessageReader;
 import de.ixxat.vci3.bal.can.ICanMessageWriter;
 import de.ixxat.vci3.bal.can.ICanScheduler;
 import de.ixxat.vci3.bal.can.ICanSocket;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
  

@@ -1,6 +1,5 @@
 package main;
 //This main class start the JavaFX GUI, and calls to check for available ports
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
