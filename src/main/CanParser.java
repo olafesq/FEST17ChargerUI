@@ -4,6 +4,7 @@ package main;
  *
  * @author Olavi
  */
+
 public class CanParser {
     int nCells = 6*24;//
     int[] temps = new int[72]; //array of temps, 8*6 + 24
@@ -12,30 +13,31 @@ public class CanParser {
     int minVcell = 32000;
     int minVcellAct = 32000;
     int maxVcell = 42000;
-     
+         
     int[] voltages = new int[nCells]; //array to hold voltages
     double[] vProgress = new double[nCells]; //array to hold V progress bar values 
-    
    
     void parseMsg(int id, byte[] data){ // "Timestamp: 875467195 Flags:      ID: 0x00000294 Data: 0xF8 0x00 0xC0 0x00 0x00 0x00 0xC0 0x00"
      
-        Main.controller.appendLogWindow(String.valueOf(id)+" & data: "+ String.valueOf(data));
+        //Main.controller.appendLogWindow(String.valueOf(id)+" & data: "+ String.valueOf(data));
                 
         //Sort message by ID and put voltages into voltage table, temps to temps table
-        if (id>=0x61a && id<=0x66f) setVoltages(id, data);
+        if (id>=0x61a & id<=0x66f) setVoltages(id, data);
         
-        else if (id>=0x6a1 && id<=0x6ac) setTemps(id, data);
+        else if (id>=0x6a1 & id<=0x6ac) setTemps(id, data);
         
         else if (id == 0x6b0) BMSerror(id, data);
         
         else if (id == 0x600){ //Info text
             float[] dpoint = new float[5];
-                dpoint[0] = concatByte(data, 0)/10000f;
+                dpoint[0] = concatByte(data, 0)/10000f;                    
                 dpoint[1] = concatByte(data, 2)/10000f;
                     minVcellAct = concatByte(data, 2);
                 dpoint[2] = concatByte(data, 4)/10000f;
-                dpoint[3] = data[5];
-                dpoint[4] = data[6];   
+                dpoint[3] = data[6];
+                dpoint[4] = data[7];   
+           
+            //System.out.print("Debug this: "+ dpoint[0] + " "+ dpoint[1]+" "+ dpoint[2]);
             
             String maxV = String.format("%.2f",dpoint[0]);//two decimal points
             String minV = String.format("%.2f",dpoint[1]);  
@@ -60,7 +62,7 @@ public class CanParser {
         voltages[(id-0x61a)*4]   = vBuffer1;
         voltages[(id-0x61a)*4+1] = vBuffer2;
         voltages[(id-0x61a)*4+2] = vBuffer3;
-        voltages[(id-0x61a)*4+3] = vBuffer4;    
+        voltages[(id-0x61a)*4+3] = vBuffer4;            
         
         calcVProgress(); 
     }
@@ -68,15 +70,16 @@ public class CanParser {
     void calcVProgress(){ //re-calculate progress bar values
         int minVcll = minVcell; 
         if (Main.controller.brescalePBar) minVcll = minVcellAct;
-        for (int i=0; i==nCells; i++){
-         vProgress[i] = (voltages[i] - minVcll) / (double)(maxVcell - minVcll);                     
+        
+        for (int i=0; i<nCells; i++){
+            vProgress[i] = (double)(voltages[i] - minVcll) / (maxVcell - minVcll); //casting it to double                    
         }
         
         Main.controller.setProgressBar(vProgress); //Send new progressbar values to UI    
     }
     
     void setTemps(int id, byte[] data){ //parse temps table
-        for (int i=0; i==7; i++){ //each id holds 8 temp values
+        for (int i=0; i<8; i++){ //each id holds 8 temp values
             temps[(id-0x6a1)*8 + i] = data[i];
         }
         
@@ -100,8 +103,11 @@ public class CanParser {
     }
     
     int concatByte(byte[] partB, int pos){ //helper to concatenate Bytes
-        int buffer = partB[pos];
-        buffer = buffer << 8 | partB[pos+1]; //bitshift left + bitwise inclusive OR
-    return (buffer & 0x0000ffff); //biwise and bitmask, otherwise FF infront        
+        int buffer = partB[pos];        
+        buffer = buffer << 8;
+        int buffer2 =  partB[pos+1] & 0x000000ff; //bcs java has no unsigned int!
+        buffer = buffer | buffer2; //bitshift left + bitwise inclusive OR        
+        buffer &= 0x0000ffff;
+    return buffer; //biwise and bitmask, otherwise FF infront        
     }
 }

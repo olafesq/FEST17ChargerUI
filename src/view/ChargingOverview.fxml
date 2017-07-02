@@ -83,7 +83,7 @@
                   </Pane>
                   <Pane prefHeight="286.0">
                      <children>
-                        <Circle fx:id="diod" layoutX="75.0" layoutY="58.0" radius="4.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0">
+                        <Circle fx:id="diod" layoutX="75.0" layoutY="58.0" radius="4.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" visible="false">
                            <fill>
                               <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
                                  <stops>
