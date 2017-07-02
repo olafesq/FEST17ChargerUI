@@ -664,7 +664,11 @@ public class IxxatCANbus {
           oVciDevice = null;
         }
 
-        System.out.println("Program finished!");
+        System.out.println("CAN disconnected");
+        
+        Main.controller.blinkDiod(false);
+        Main.controller.appendLogWindow("CAN disconnected!");
+        
     }
 
     public void toggleBalance(){

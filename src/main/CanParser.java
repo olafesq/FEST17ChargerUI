@@ -8,12 +8,13 @@ package main;
 public class CanParser {
     int nCells = 6*24;//
     int[] temps = new int[72]; //array of temps, 8*6 + 24
-    int minV = 4480000;
-    int maxV = 5880000;
-    int minVcell = 32000;
-    int minVcellAct = 32000;
+    int minV = 46080;
+    int maxV = 60000;
+    int minVcell = 32000;   
     int maxVcell = 42000;
-         
+    int minVcellAct = minVcell;
+    int maxVcellAct = maxVcell;    
+    
     int[] voltages = new int[nCells]; //array to hold voltages
     double[] vProgress = new double[nCells]; //array to hold V progress bar values 
    
@@ -22,29 +23,34 @@ public class CanParser {
         //Main.controller.appendLogWindow(String.valueOf(id)+" & data: "+ String.valueOf(data));
                 
         //Sort message by ID and put voltages into voltage table, temps to temps table
-        if (id>=0x61a & id<=0x66f) setVoltages(id, data);
+        if (id>=0x61a && id<=0x66f) setVoltages(id, data);
         
-        else if (id>=0x6a1 & id<=0x6ac) setTemps(id, data);
+        else if (id>=0x6a1 && id<=0x6ac) setTemps(id, data);
         
         else if (id == 0x6b0) BMSerror(id, data);
         
+        else if (id>=0x6b2 && id<=0x6b4) setBalancing(id, data);
+        
         else if (id == 0x600){ //Info text
-            float[] dpoint = new float[5];
-                dpoint[0] = concatByte(data, 0)/10000f;                    
+            double[] dpoint = new double[5];
+                dpoint[0] = concatByte(data, 0)/10000f;     
+                    maxVcellAct = concatByte(data, 0);
                 dpoint[1] = concatByte(data, 2)/10000f;
                     minVcellAct = concatByte(data, 2);
                 dpoint[2] = concatByte(data, 4)/10000f;
                 dpoint[3] = data[6];
                 dpoint[4] = data[7];   
-           
+                
+                double[] d = {dpoint[2], dpoint[1], dpoint[0]}; //for graph
+                Main.controller.addDPoint(d);
             //System.out.print("Debug this: "+ dpoint[0] + " "+ dpoint[1]+" "+ dpoint[2]);
             
-            String maxV = String.format("%.2f",dpoint[0]);//two decimal points
-            String minV = String.format("%.2f",dpoint[1]);  
-            String avgV = String.format("%.2f",dpoint[2]);  
-            String maxT = String.format("%.0f",dpoint[3]);
-            String minT = String.format("%.0f",dpoint[4]);
-            Main.controller.setInfoText(maxV, minV, avgV, maxT);
+            String maxVs = String.format("%.2f",dpoint[0]);//two decimal points
+            String minVs = String.format("%.2f",dpoint[1]);  
+            String avgVs = String.format("%.2f",dpoint[2]);  
+            String maxTs = String.format("%.0f",dpoint[3]);
+            String minTs = String.format("%.0f",dpoint[4]);
+            Main.controller.setInfoText(maxVs, minVs, avgVs, maxTs);
         }
         else  if (id == 0x605) {//Battery V, etc
             int voltBat = concatByte(data,0);
@@ -59,23 +65,31 @@ public class CanParser {
         int vBuffer3 = concatByte(data, 4);
         int vBuffer4 = concatByte(data, 6);
         
-        voltages[(id-0x61a)*4]   = vBuffer1;
-        voltages[(id-0x61a)*4+1] = vBuffer2;
-        voltages[(id-0x61a)*4+2] = vBuffer3;
-        voltages[(id-0x61a)*4+3] = vBuffer4;            
-        
+        int modul = ((id>>4) & 0x0f)-1;
+        int row = (id & 0x0f) -10;
+                
+        voltages[(row*4)  + modul*6*4] = vBuffer1;
+        voltages[(row*4+1)+ modul*6*4] = vBuffer2;
+        voltages[(row*4+2)+ modul*6*4] = vBuffer3;
+        voltages[(row*4+3)+ modul*6*4] = vBuffer4;            
+               
         calcVProgress(); 
     }
     
     void calcVProgress(){ //re-calculate progress bar values
         int minVcll = minVcell; 
-        if (Main.controller.brescalePBar) minVcll = minVcellAct;
+        int maxVcll = maxVcell;
+        if (Main.controller.brescalePBar){
+            minVcll = minVcellAct;
+            maxVcll = maxVcellAct;
+        }
         
         for (int i=0; i<nCells; i++){
-            vProgress[i] = (double)(voltages[i] - minVcll) / (maxVcell - minVcll); //casting it to double                    
+            vProgress[i] = (double)(voltages[i] - minVcll) / (maxVcll - minVcll); //casting it to double                    
         }
         
         Main.controller.setProgressBar(vProgress); //Send new progressbar values to UI    
+        Main.controller.setVHint(voltages); 
     }
     
     void setTemps(int id, byte[] data){ //parse temps table
@@ -91,8 +105,8 @@ public class CanParser {
         Main.controller.setTPogress(tProgress);
         //toConsole(Integer.toString(voltBalan[nCells-1-2][0]));
         
-        int tLabel = voltBat/10000;
-        Main.controller.settLabel(Integer.toString(tLabel)+"/"+ Integer.toString(maxV/10000));
+        int tLabel = voltBat/100;
+        Main.controller.settLabel(Integer.toString(tLabel)+"/"+ Integer.toString(maxV/100));
         //toConsole(Integer.toString(tLabel));
     }
     
@@ -100,6 +114,13 @@ public class CanParser {
         Main.controller.appendLogWindow("BMS error recieved!");
         Main.controller.appendLogWindow(String.valueOf(id)+" & data: "+ String.valueOf(data[0]));
                 
+    }
+    
+    void setBalancing(int id, byte[] data){
+        boolean[] bBalance = new boolean[nCells];
+        int row = (id & 0x0f) -2;
+        bBalance[0] = false;
+        Main.controller.setBalIndicator(bBalance);
     }
     
     int concatByte(byte[] partB, int pos){ //helper to concatenate Bytes

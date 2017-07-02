@@ -30,10 +30,12 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -67,6 +69,8 @@ public class ChargingOverviewController {
     public boolean brescalePBar = false;
     boolean once = true;
     int oldRow = 0;
+    
+    ToggleGroup group1 = new ToggleGroup();
     
     public int aPollTime = 2500; //Default 5sec interval for 2 things
             
@@ -105,6 +109,10 @@ public class ChargingOverviewController {
     private ToggleButton balance;
     @FXML
     private ToggleButton vent;
+    @FXML
+    private RadioButton absV;
+    @FXML
+    private RadioButton suhtV;
     
     //Settings Tab
     @FXML
@@ -460,6 +468,19 @@ public class ChargingOverviewController {
         }); 
     }
     
+    public void setVHint(int [] volts){ //show cell V when hovering over it useing Tooltip class      
+        pBar = getNodesOfType(pBarPane, ProgressBar.class);
+        List<Tooltip> hints = new ArrayList<>(pBar.size()); //crate list for all tooltips
+        
+        Platform.runLater(() -> {
+            for (int i = 0; i < pBar.size(); i++){
+                hints.add(new Tooltip()); //every loop adds new tooltip element to the list
+                hints.get(i).setText(String.valueOf((double)volts[i]/10000)); //set the tooltip value
+                pBar.get(i).setTooltip(hints.get(i)); //attach tooltip to the progress bar element
+            }            
+        }); 
+    }
+    
     public void setYHint(){
         Platform.runLater(() -> {            
             yHint.setText("Kliki et y-telge muuta.");
@@ -474,7 +495,7 @@ public class ChargingOverviewController {
         if(once){ //show hint only once
         Tooltip PBarHint = new Tooltip();
         Platform.runLater(() -> {            
-            PBarHint.setText("Kliki graafika muutmiseks.");
+            PBarHint.setText("Kliki 'suhteliseks' erinevuseks.");
             PBarHint.setAutoHide(true);
             //pBar.get(1).setTooltip(PBarHint);
             PBarHint.show(pBarPane.getScene().getWindow(), 100, pBarPane.getHeight());

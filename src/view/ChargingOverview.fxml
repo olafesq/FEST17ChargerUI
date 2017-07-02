@@ -115,7 +115,7 @@
                      <content>
                         <VBox prefHeight="200.0">
                            <children>
-                              <HBox onMouseEntered="#setPBarHint" prefWidth="1130.0" spacing="30.0">
+                              <HBox prefWidth="1130.0" spacing="30.0">
                                  <children>
                                     <Label layoutX="52.0" layoutY="413.0" prefWidth="120.0" text="Module 1" />
                                     <Label layoutX="175.0" layoutY="413.0" prefWidth="120.0" text="Module 2" />
@@ -130,7 +130,7 @@
                               </HBox>
                               <StackPane minWidth="-Infinity" prefHeight="252.0" prefWidth="390.0">
                                  <children>
-                                    <HBox fx:id="pBarPane" disable="true" onMouseClicked="#handlePBarScale" prefHeight="252.0" prefWidth="1130.0">
+                                    <HBox fx:id="pBarPane" disable="true" prefHeight="252.0" prefWidth="1130.0">
                                        <children>
                                           <VBox prefHeight="252.0" prefWidth="75.0">
                                              <children>
@@ -522,7 +522,7 @@
                                           </VBox>
                                        </children>
                                     </HBox>
-                                    <HBox fx:id="pBalPane" mouseTransparent="true" prefHeight="252.0" prefWidth="1130.0">
+                                    <HBox fx:id="pBalPane" prefHeight="252.0" prefWidth="1130.0">
                                        <children>
                                           <VBox prefHeight="252.0" prefWidth="75.0" spacing="8.0">
                                              <children>
@@ -722,21 +722,25 @@
                                              </children>
                                           </VBox>
                                           <VBox prefHeight="429.0" prefWidth="175.0" />
-                                          <VBox prefHeight="429.0" spacing="50.0">
+                                          <VBox prefHeight="429.0" spacing="10.0">
                                              <children>
-                                                <Label id="welcome-text" contentDisplay="CENTER" text="Charging controller">
-                                                   <padding>
-                                                      <Insets top="4.0" />
-                                                   </padding>
-                                                </Label>
+                                                <Label id="welcome-text" contentDisplay="CENTER" text="Charging controller" />
                                                 <Label id="big-text" contentDisplay="CENTER" text="FEST17">
                                                    <padding>
-                                                      <Insets left="30.0" top="4.0" />
+                                                      <Insets left="30.0" />
                                                    </padding>
                                                 </Label>
+                                                <RadioButton fx:id="absV" mnemonicParsing="false" onAction="#handlePBarScale" selected="true" text="Absoluutne erinevus">
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="group1" />
+                                                   </toggleGroup>
+                                                   <padding>
+                                                      <Insets top="50.0" />
+                                                   </padding></RadioButton>
+                                                <RadioButton fx:id="suhtV" mnemonicParsing="false" onAction="#handlePBarScale" text="Suhteline erinevus" toggleGroup="$group1" />
                                              </children>
                                              <padding>
-                                                <Insets top="70.0" />
+                                                <Insets top="20.0" />
                                              </padding>
                                           </VBox>
                                        </children>
