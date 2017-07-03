@@ -186,7 +186,8 @@ public class ChargingOverviewController {
     }
     @FXML
     private void handlePBarScale(){
-        brescalePBar = !brescalePBar;       
+        brescalePBar = !brescalePBar;  
+        can.togglePBarScale();
     }
     @FXML
     private void toggleAutoPoll(){        

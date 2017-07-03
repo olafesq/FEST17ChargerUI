@@ -690,4 +690,8 @@ public class IxxatCANbus {
     public void hitReset(){
         reset = 0xff;
     }
+    
+    public void togglePBarScale(){
+        canParser.calcVProgress();
+    }
 }
