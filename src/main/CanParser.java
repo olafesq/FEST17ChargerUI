@@ -1,5 +1,9 @@
 package main;
 //Gets a CAN message with ID to parse.
+
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
+
 /**
  *
  * @author Olavi
@@ -117,10 +121,17 @@ public class CanParser {
     }
     
     void setBalancing(int id, byte[] data){
-        boolean[] bBalance = new boolean[nCells];
-        int row = (id & 0x0f) -2;
-        bBalance[0] = false;
-        Main.controller.setBalIndicator(bBalance);
+        boolean[] bBalance = new boolean[nCells]; //inits to false
+        int row = (id & 0x0f) -1;
+        
+        for (int bte = 5; bte>=0; bte--){ //loop over 6 bytes in data msg, last 2 bytes are empty
+            for (int i=0; i<8; i++){         //loop over 8 bits in one byte
+                int bit = (data[bte] >> i) & 1; //takes the last bit from byte
+                if (bit == 1) bBalance[row*(bte*8+8)-i-1]=true; 
+                //else bBalance[row*(bte*8+8)-i-1]=false;
+            }            
+        }                
+        Main.controller.setBalIndicator(bBalance);        
     }
     
     int concatByte(byte[] partB, int pos){ //helper to concatenate Bytes
@@ -131,4 +142,5 @@ public class CanParser {
         buffer &= 0x0000ffff;
     return buffer; //biwise and bitmask, otherwise FF infront        
     }
+
 }
