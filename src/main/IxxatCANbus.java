@@ -449,11 +449,21 @@ public class IxxatCANbus {
                     if(Main.controller.bautoPoll) canWriter(askID, askData);//loop happens here
                     reset = 0x00;
                     
+                    updateUI();                    
+                    
                     Thread.sleep(Main.controller.aPollTime);                    
                 } catch (InterruptedException ex) {
                     Main.controller.appendLogWindow("Err..Try again! "+ ex.toString());
                 }            
             }
+        }
+        
+        void updateUI(){ //Ask to update UI
+            Main.controller.setProgressBar(canParser.vProgress); //Send new progressbar values to UI    
+            Main.controller.setVHint(canParser.voltages); 
+            Main.controller.setTemp(canParser.temps); //Send new temps to UI
+            Main.controller.setBalIndicator(canParser.bBalance);   
+            Main.controller.addDPoint(canParser.dgraph);
         }
     }    
     

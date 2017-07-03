@@ -1,9 +1,5 @@
 package main;
 //Gets a CAN message with ID to parse.
-
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
-
 /**
  *
  * @author Olavi
@@ -20,8 +16,10 @@ public class CanParser {
     int maxVcellAct = maxVcell;    
     
     int[] voltages = new int[nCells]; //array to hold voltages
+    double[] dgraph = new double[3]; //datapoints for graph
     double[] vProgress = new double[nCells]; //array to hold V progress bar values 
-   
+    boolean[] bBalance = new boolean[nCells]; //inits to false
+    
     void parseMsg(int id, byte[] data){ // "Timestamp: 875467195 Flags:      ID: 0x00000294 Data: 0xF8 0x00 0xC0 0x00 0x00 0x00 0xC0 0x00"
      
         //Main.controller.appendLogWindow(String.valueOf(id)+" & data: "+ String.valueOf(data));
@@ -39,14 +37,17 @@ public class CanParser {
             double[] dpoint = new double[5];
                 dpoint[0] = concatByte(data, 0)/10000f;     
                     maxVcellAct = concatByte(data, 0);
+                    dgraph[2] = dpoint[0];
                 dpoint[1] = concatByte(data, 2)/10000f;
                     minVcellAct = concatByte(data, 2);
+                    dgraph[1] = dpoint[1];
                 dpoint[2] = concatByte(data, 4)/10000f;
+                    dgraph[0] = dpoint[2];
                 dpoint[3] = data[6];
                 dpoint[4] = data[7];   
                 
-                double[] d = {dpoint[2], dpoint[1], dpoint[0]}; //for graph
-                Main.controller.addDPoint(d);
+//                double[] dgraph = {dpoint[2], dpoint[1], dpoint[0]}; //for graph
+//                Main.controller.addDPoint(dgraph);
             //System.out.print("Debug this: "+ dpoint[0] + " "+ dpoint[1]+" "+ dpoint[2]);
             
             String maxVs = String.format("%.2f",dpoint[0]);//two decimal points
@@ -92,16 +93,15 @@ public class CanParser {
             vProgress[i] = (double)(voltages[i] - minVcll) / (maxVcll - minVcll); //casting it to double                    
         }
         
-        Main.controller.setProgressBar(vProgress); //Send new progressbar values to UI    
-        Main.controller.setVHint(voltages); 
+//        Main.controller.setProgressBar(vProgress); //Send new progressbar values to UI    
+//        Main.controller.setVHint(voltages); 
     }
     
     void setTemps(int id, byte[] data){ //parse temps table
         for (int i=0; i<8; i++){ //each id holds 8 temp values
             temps[(id-0x6a1)*8 + i] = data[i];
-        }
-        
-        Main.controller.setTemp(temps); //Send new temps to UI
+        }        
+//        Main.controller.setTemp(temps); //Send new temps to UI
     }
     
     void calcTProgress(int voltBat){ //the round total progress circle
@@ -120,18 +120,16 @@ public class CanParser {
                 
     }
     
-    void setBalancing(int id, byte[] data){
-        boolean[] bBalance = new boolean[nCells]; //inits to false
+    void setBalancing(int id, byte[] data){        
         int row = (id & 0x0f) -1;
         
         for (int bte = 5; bte>=0; bte--){ //loop over 6 bytes in data msg, last 2 bytes are empty
             for (int i=0; i<8; i++){         //loop over 8 bits in one byte
                 int bit = (data[bte] >> i) & 1; //takes the last bit from byte
-                if (bit == 1) bBalance[row*(bte*8+8)-i-1]=true; 
-                //else bBalance[row*(bte*8+8)-i-1]=false;
+                bBalance[row*(bte*8+8)-i-1] = (bit == 1);
             }            
         }                
-        Main.controller.setBalIndicator(bBalance);        
+//        Main.controller.setBalIndicator(bBalance);        
     }
     
     int concatByte(byte[] partB, int pos){ //helper to concatenate Bytes
