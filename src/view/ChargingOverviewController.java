@@ -157,8 +157,8 @@ public class ChargingOverviewController {
     
     @FXML
     private void handleReset(){
-        can.hitReset();
-        uart.reset();
+        if(canning) can.hitReset();
+        else uart.reset();
     }
     
     @FXML
@@ -177,8 +177,8 @@ public class ChargingOverviewController {
     private void handleBalance(){
        //boolean selected = vent.selectedProperty().get();
        //vent.setSelected(!selected);
-       can.toggleBalance();
-       uart.toggleBalance();
+       if(canning) can.toggleBalance();
+       else uart.toggleBalance();
     }
     @FXML
     private void handleVent(){

@@ -460,10 +460,12 @@ public class IxxatCANbus {
         
         void updateUI(){ //Ask to update UI
             Main.controller.setProgressBar(canParser.vProgress); //Send new progressbar values to UI    
-            Main.controller.setVHint(canParser.voltages); 
+            Main.controller.setMinVCellColor(canParser.minVRow);
             Main.controller.setTemp(canParser.temps); //Send new temps to UI
+            Main.controller.setMaxTempColor(canParser.isMaxTRow);
             Main.controller.setBalIndicator(canParser.bBalance);   
             Main.controller.addDPoint(canParser.dgraph);
+            Main.controller.setVHint(canParser.voltages);
         }
     }    
     

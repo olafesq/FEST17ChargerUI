@@ -6,7 +6,7 @@ import java.util.Arrays;
 public class SerialParser {
     int nCells = 6*24+4;//14*10; //How many cells in battery pack //+4 for averaga Voltage, sumVoltage, minV, maxV 
     int nTemp = 8*6+3; //5*10; Number of temp sensors //+3 for avertage temp, minT, max T
-    int maxV = 5880000;
+    int maxV = 6000000;
     int maxVcell = 42000;
     int minV = 4480000; //3920000?
     int minVcell = 32000;

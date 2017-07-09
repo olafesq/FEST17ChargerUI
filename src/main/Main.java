@@ -51,18 +51,6 @@ public class Main extends Application {
         controller.appendLogWindow("Date: "+dateFormat.format(date)); //datestamp
         controller.appendLogWindow("Console opened... Select port and Connect.");
         
-        //Kustuta start!
-//        byte[] proovB = new byte[]{(byte)0x92, (byte)0x0B, (byte)0x90, (byte)0x04, (byte)0x91, (byte)0x23, (byte)0x17, (byte)0x16};
-//        float[] dpoint = new float[5];
-//        
-//        dpoint[0] = concatByte(proovB, 0);
-//        dpoint[1] = concatByte(proovB, 2);
-//        dpoint[2] = concatByte(proovB, 4);
-//        dpoint[3] = proovB[5];
-//        dpoint[4] = proovB[6];        
-//        System.out.println(dpoint[0] + " # " + dpoint[1] + " " + dpoint[2]+ " " + dpoint[3]+" " + dpoint[4]);
-//        //Kustuta end!
-        
         uart = new UART(controller);
         controller.setUart(uart);        
                 

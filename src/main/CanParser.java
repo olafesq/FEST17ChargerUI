@@ -1,5 +1,8 @@
 package main;
 //Gets a CAN message with ID to parse.
+
+import java.util.Arrays;
+
 /**
  *
  * @author Olavi
@@ -7,19 +10,23 @@ package main;
 
 public class CanParser {
     int nCells = 6*24;//
-    int[] temps = new int[72]; //array of temps, 8*6 + 24
+    int[] temps = new int[48]; //array of temps, 8*6 + 24?
     int minV = 46080;
     int maxV = 60000;
     int minVcell = 32000;   
     int maxVcell = 42000;
     int minVcellAct = minVcell;
     int maxVcellAct = maxVcell;    
+    int maxTCell = 0;
+    int minVRow = 0;
+    int minCellV = maxVcell;
     
     int[] voltages = new int[nCells]; //array to hold voltages
     double[] dgraph = new double[3]; //datapoints for graph
     double[] vProgress = new double[nCells]; //array to hold V progress bar values 
     boolean[] bBalance = new boolean[nCells]; //inits to false
-    
+    boolean[] isMaxTRow = new boolean[48];
+     
     void parseMsg(int id, byte[] data){ // "Timestamp: 875467195 Flags:      ID: 0x00000294 Data: 0xF8 0x00 0xC0 0x00 0x00 0x00 0xC0 0x00"
      
         //Main.controller.appendLogWindow(String.valueOf(id)+" & data: "+ String.valueOf(data));
@@ -27,7 +34,7 @@ public class CanParser {
         //Sort message by ID and put voltages into voltage table, temps to temps table
         if (id>=0x61a && id<=0x66f) setVoltages(id, data);
         
-        else if (id>=0x6a1 && id<=0x6ac) setTemps(id, data);
+        else if (id>=0x6a1 && id<=0x6a6) setTemps(id, data);
         
         else if (id == 0x6b0) BMSerror(id, data);
         
@@ -79,6 +86,13 @@ public class CanParser {
         voltages[(row*4+3)+ modul*6*4] = vBuffer4;            
                
         calcVProgress(); 
+        
+        if(isMinRow(voltages[(row*4)  + modul*6*4])) minVRow = (row*4)  + modul*6*4;
+        if(isMinRow(voltages[(row*4+1)  + modul*6*4])) minVRow = (row*4+1)  + modul*6*4;
+        if(isMinRow(voltages[(row*4+2)  + modul*6*4])) minVRow = (row*4+2)  + modul*6*4;
+        if(isMinRow(voltages[(row*4+3)  + modul*6*4])) minVRow = (row*4+3)  + modul*6*4;
+        
+        if (id==0x66f) minCellV = maxVcell ; //reset refernce v   
     }
     
     void calcVProgress(){ //re-calculate progress bar values
@@ -100,6 +114,14 @@ public class CanParser {
     void setTemps(int id, byte[] data){ //parse temps table
         for (int i=0; i<8; i++){ //each id holds 8 temp values
             temps[(id-0x6a1)*8 + i] = data[i];
+            
+             //Detect maxTcell
+            int row = (id-0x6a1)*8 + i;
+            if (temps[row]>= maxTCell){
+                maxTCell = temps[row];//to find the highest cell temp
+                Arrays.fill(isMaxTRow, false); //reset max row counter
+                isMaxTRow[row] = true; //maxTCell row number
+            }
         }        
 //        Main.controller.setTemp(temps); //Send new temps to UI
     }
@@ -141,4 +163,10 @@ public class CanParser {
     return buffer; //biwise and bitmask, otherwise FF infront        
     }
 
+    boolean isMinRow(int cellV){
+        if (cellV<=minCellV) {
+           minCellV=cellV;
+           return true;
+    } else return false;       
+    }
 }
