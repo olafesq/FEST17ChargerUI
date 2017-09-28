@@ -406,8 +406,8 @@ public class ChargingOverviewController {
     public void setTemp(int[] temp){
         List<Label> pTemp = getNodesOfType(pBarPane, Label.class);
         Platform.runLater(() -> { //Only FX thread can update UI text label
-            for (int i = 0; i < pTemp.size(); i++){
-                pTemp.get(i).setText(Integer.toString(temp[i])+" C"); //ArrayIndexOutOfBoundsException: 48
+            for (int i = 0; i < (pTemp.size()-2); i++){
+                pTemp.get(i).setText(Integer.toString(temp[i])+" C"); 
                 if (temp[i]>=maxT) pTemp.get(i).setStyle("-fx-text-fill: red"); //highlights all cell above maxT
                 else pTemp.get(i).setStyle("-fx-text-fill: black");                
             }
