@@ -62,7 +62,7 @@ public class SerialProtocol {
 
         @Override //When there is serial message coming in..
         public void serialEvent(SerialPortEvent spe) {
-            Main.controller.blinkDiod(true);
+            Main17.controller.blinkDiod(true);
             
             if (spe.getEventType()== SerialPortEvent.DATA_AVAILABLE){
                                 
@@ -78,14 +78,14 @@ public class SerialProtocol {
                         }                        
                     }
                     catch (IOException e) {
-                        Main.controller.appendLogWindow(e.toString());
+                        Main17.controller.appendLogWindow(e.toString());
                     }
                     dataParser.parseMsg(new String (buffer,0,tail-1)); //Send received message to data parser //tail-1 to get rid of \r char 
 //                };
 //                Thread t = new Thread(runnable);
 //                t.start();              
             }
-            Main.controller.blinkDiod(false);
+            Main17.controller.blinkDiod(false);
         }
     }
     

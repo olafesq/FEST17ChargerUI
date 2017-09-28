@@ -59,7 +59,7 @@ public class SerialParser {
     }
     
     public void toConsole(String string){
-        Main.controller.appendLogWindow(string);
+        Main17.controller.appendLogWindow(string);
     }
     public void temps(String message){
         try {
@@ -79,8 +79,8 @@ public class SerialParser {
                 if (row==nTemp){  //detect last row and send data to UI thread
                     btemp=false;
                     int[] temp2 = Arrays.copyOfRange(temp, 0, nTemp-2); //send only temps of elements
-                    Main.controller.setTemp(temp2);
-                    Main.controller.setMaxTempColor(isMaxTRow);
+                    Main17.controller.setTemp(temp2);
+                    Main17.controller.setMaxTempColor(isMaxTRow);
                     maxT = temp[nTemp-1]; //last element is maxT                   
                     //toConsole(temp.toString());
                 }
@@ -120,9 +120,9 @@ public class SerialParser {
             bvoltages = false; //reset flag when last row arrived   
             calcProgress(voltBalan);
             calcTProgress(voltBalan);
-            Main.controller.setVHint(voltBalan); 
-            Main.controller.setMinVCellColor(minVRow);
-            Main.controller.setBalIndicator(bBalance);
+            Main17.controller.setVHint(voltBalan); 
+            Main17.controller.setMinVCellColor(minVRow);
+            Main17.controller.setBalIndicator(bBalance);
             //UART.controller.appendLogWindow(String.valueOf(bBalance[0]));
             minCellV = maxVcell ; //reset refernce v            
         }         
@@ -137,11 +137,11 @@ public class SerialParser {
     
     void calcTProgress(int [][] voltBalan){ //the round total progress circle
         double tProgress =  (voltBalan[nCells-1-2][0]-minV)/(double)(maxV-minV);
-        Main.controller.setTPogress(tProgress);
+        Main17.controller.setTPogress(tProgress);
         //toConsole(Integer.toString(voltBalan[nCells-1-2][0]));
         
         int tLabel = voltBalan[nCells-1-2][0]/10000;
-        Main.controller.settLabel(Integer.toString(tLabel)+"/"+ Integer.toString(maxV/10000));
+        Main17.controller.settLabel(Integer.toString(tLabel)+"/"+ Integer.toString(maxV/10000));
         //toConsole(Integer.toString(tLabel));
     }
     
@@ -152,7 +152,7 @@ public class SerialParser {
             progress[i] = (voltBalan[i][0]-minVcell)/(double)(maxVcell-minVcell) ;     
             //toConsole(Double.toString(progress[i]));
         }
-        Main.controller.setProgressBar(progress);
+        Main17.controller.setProgressBar(progress);
         
         //Datapoints for graph & info text area
         double[] dpoint = new double[3];
@@ -160,9 +160,9 @@ public class SerialParser {
         dpoint[1] = (double)voltBalan[nCells-1-1][0]/10000; //minV
         dpoint[2] = (double)voltBalan[nCells-1][0]/10000;   //maxV
         
-        Main.controller.addDPoint(dpoint);
+        Main17.controller.addDPoint(dpoint);
         
-        Main.controller.setInfoText(String.format("%.2f",dpoint[2]), String.format("%.2f",dpoint[1]),  
+        Main17.controller.setInfoText(String.format("%.2f",dpoint[2]), String.format("%.2f",dpoint[1]),  
                 String.format("%.2f",dpoint[0]),  Integer.toString(maxT)); //two decimal points
     }
     

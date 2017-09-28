@@ -13,7 +13,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import view.ChargingOverviewController;
 
-public class Main extends Application {
+public class Main17 extends Application {
     
 //    public static void main(String[] args) { //Redundant
 //        launch(args);
@@ -77,7 +77,7 @@ public class Main extends Application {
         try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("/view/RootLayout.fxml"));
+            loader.setLocation(Main17.class.getResource("/view/RootLayout.fxml"));
             rootLayout = (BorderPane) loader.load();
             
             // Show the scene containing the root layout.
@@ -93,7 +93,7 @@ public class Main extends Application {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("/view/ChargingOverview.fxml"));
+            loader.setLocation(Main17.class.getResource("/view/ChargingOverview.fxml"));
             AnchorPane chargerOverview = (AnchorPane) loader.load();
             
             // Show the scene containing the root layout.

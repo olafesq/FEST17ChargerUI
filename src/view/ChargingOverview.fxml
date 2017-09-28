@@ -520,30 +520,6 @@
                                                 <Insets left="5.0" top="20.0" />
                                              </padding>
                                           </VBox>
-                                          <VBox prefHeight="429.0" spacing="10.0">
-                                             <children>
-                                                <Label id="welcome-text" contentDisplay="CENTER" text="Charging controller" />
-                                                <Label id="big-text" contentDisplay="CENTER" text="FEST17">
-                                                   <padding>
-                                                      <Insets left="30.0" />
-                                                   </padding>
-                                                </Label>
-                                                <RadioButton fx:id="absV" mnemonicParsing="false" onAction="#handlePBarScale" selected="true" text="Absoluutne erinevus">
-                                                   <toggleGroup>
-                                                      <ToggleGroup fx:id="group1" />
-                                                   </toggleGroup>
-                                                   <padding>
-                                                      <Insets top="50.0" />
-                                                   </padding></RadioButton>
-                                                <RadioButton fx:id="suhtV" mnemonicParsing="false" onAction="#handlePBarScale" text="Suhteline erinevus" toggleGroup="$group1" />
-                                             </children>
-                                             <padding>
-                                                <Insets top="20.0" />
-                                             </padding>
-                                             <HBox.margin>
-                                                <Insets left="70.0" />
-                                             </HBox.margin>
-                                          </VBox>
                                        </children>
                                     </HBox>
                                     <HBox fx:id="pBalPane" mouseTransparent="true" prefHeight="252.0" prefWidth="1130.0">
@@ -745,7 +721,31 @@
                                                 <Circle fill="#3bff26" radius="5.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.5" />
                                              </children>
                                           </VBox>
-                                          <VBox prefHeight="429.0" prefWidth="175.0" />
+                                          <VBox prefHeight="429.0" prefWidth="68.0" />
+                                          <VBox prefHeight="429.0" spacing="10.0">
+                                             <children>
+                                                <Label id="welcome-text" contentDisplay="CENTER" text="Charging controller" />
+                                                <Label id="big-text" contentDisplay="CENTER" text="FEST17">
+                                                   <padding>
+                                                      <Insets left="30.0" />
+                                                   </padding>
+                                                </Label>
+                                                <RadioButton fx:id="absV" mnemonicParsing="false" onAction="#handlePBarScale" selected="true" text="Absoluutne erinevus">
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="group1" />
+                                                   </toggleGroup>
+                                                   <padding>
+                                                      <Insets top="50.0" />
+                                                   </padding></RadioButton>
+                                                <RadioButton fx:id="suhtV" mnemonicParsing="false" onAction="#handlePBarScale" text="Suhteline erinevus" toggleGroup="$group1" />
+                                             </children>
+                                             <padding>
+                                                <Insets top="20.0" />
+                                             </padding>
+                                             <HBox.margin>
+                                                <Insets left="70.0" />
+                                             </HBox.margin>
+                                          </VBox>
                                        </children>
                                        <padding>
                                           <Insets left="6.0" top="3.0" />

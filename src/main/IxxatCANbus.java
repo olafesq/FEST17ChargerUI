@@ -429,13 +429,13 @@ public class IxxatCANbus {
         
         Thread readCan = new Thread(new canReader());
             readCan.start();
-            Main.controller.appendLogWindow("Started listening to CAN..");
+            Main17.controller.appendLogWindow("Started listening to CAN..");
 
         Thread writeCan = new Thread(new canWriter());
             writeCan.start();
-            if (Main.controller.bautoPoll) Main.controller.appendLogWindow("Started polling for V and Temp..");
+            if (Main17.controller.bautoPoll) Main17.controller.appendLogWindow("Started polling for V and Temp..");
         
-        Main.controller.blinkDiod(Main.controller.canning);
+        Main17.controller.blinkDiod(Main17.controller.canning);
     }
     
     class canWriter implements Runnable{     
@@ -443,29 +443,29 @@ public class IxxatCANbus {
         
         @Override
         public void run() {       
-            while(Main.controller.canning){
+            while(Main17.controller.canning){
                 try {
                     byte[] askData = new byte[]{(byte)balancing, (byte)reset, (byte)0xff, (byte)0xff, (byte)0xff, 0x00, 0x00, 0x00};
-                    if(Main.controller.bautoPoll) canWriter(askID, askData);//loop happens here
+                    if(Main17.controller.bautoPoll) canWriter(askID, askData);//loop happens here
                     reset = 0x00;
                     
                     updateUI();                    
                     
-                    Thread.sleep(Main.controller.aPollTime);                    
+                    Thread.sleep(Main17.controller.aPollTime);                    
                 } catch (InterruptedException ex) {
-                    Main.controller.appendLogWindow("Err..Try again! "+ ex.toString());
+                    Main17.controller.appendLogWindow("Err..Try again! "+ ex.toString());
                 }            
             }
         }
         
         void updateUI(){ //Ask to update UI
-            Main.controller.setProgressBar(canParser.vProgress); //Send new progressbar values to UI    
-            Main.controller.setMinVCellColor(canParser.minVRow);
-            Main.controller.setTemp(canParser.temps); //Send new temps to UI
-            Main.controller.setMaxTempColor(canParser.isMaxTRow);
-            Main.controller.setBalIndicator(canParser.bBalance);   
-            Main.controller.addDPoint(canParser.dgraph);
-            Main.controller.setVHint(canParser.voltages);
+            Main17.controller.setProgressBar(canParser.vProgress); //Send new progressbar values to UI    
+            Main17.controller.setMinVCellColor(canParser.minVRow);
+            Main17.controller.setTemp(canParser.temps); //Send new temps to UI
+            Main17.controller.setMaxTempColor(canParser.isMaxTRow);
+            Main17.controller.setBalIndicator(canParser.bBalance);   
+            Main17.controller.addDPoint(canParser.dgraph);
+            Main17.controller.setVHint(canParser.voltages);
         }
     }    
     
@@ -528,7 +528,7 @@ public class IxxatCANbus {
     class canReader implements Runnable{
         @Override
         public void run() {
-            while(Main.controller.canning) canReader();
+            while(Main17.controller.canning) canReader();
         }
               
         void canReader(){ //everything is sent to can parser from here
@@ -678,8 +678,8 @@ public class IxxatCANbus {
 
         System.out.println("CAN disconnected");
         
-        Main.controller.blinkDiod(false);
-        Main.controller.appendLogWindow("CAN disconnected!");
+        Main17.controller.blinkDiod(false);
+        Main17.controller.appendLogWindow("CAN disconnected!");
         
     }
 
